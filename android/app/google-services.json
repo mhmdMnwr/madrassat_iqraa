@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "538554179423",
+    "project_id": "madrassat-iqraa-elsalafia",
+    "storage_bucket": "madrassat-iqraa-elsalafia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538554179423:android:e0f1ef642db1b82eab20ea",
+        "android_client_info": {
+          "package_name": "com.example.madrassat_iqraa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBYWGGLkojaTmdxWYfgmNGvToGdPmFNk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
