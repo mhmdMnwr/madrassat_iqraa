@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:madrassat_iqraa/core/navigation/bottom_navigation_bar.dart';
 import 'package:madrassat_iqraa/core/navigation/router.dart';
 
 class Navigation extends StatefulWidget {
@@ -42,20 +43,8 @@ class _NavigationState extends State<Navigation> {
       body: Center(
         child: _getSelectedPage(),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
-          NavigationDestination(icon: Icon(Icons.add_box), label: 'Create'),
-          NavigationDestination(
-              icon: Icon(Icons.receipt_long), label: 'Transactions'),
-          NavigationDestination(
-              icon: Icon(Icons.account_balance_wallet),
-              label: 'Add/Remove Money'),
-        ],
-      ),
+      bottomNavigationBar:
+          myNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
     );
   }
 

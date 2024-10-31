@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => MaterialApp.router(
         title: 'Flutter Demo',
         theme: ThemeData(
+          fontFamily: "Cairo",
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
