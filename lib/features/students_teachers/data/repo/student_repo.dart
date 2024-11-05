@@ -35,7 +35,7 @@ class StudentRepository {
   }
 
   // Get student by ID with error handling
-  Future<Either<String, Student?>> getStudentById(int id) async {
+  Future<Either<String, Student?>> getStudentById(String id) async {
     if (await _hasConnection()) {
       try {
         final student = await _dataSource.getStudentById(id);

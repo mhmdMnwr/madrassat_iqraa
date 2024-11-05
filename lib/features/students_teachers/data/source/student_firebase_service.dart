@@ -15,17 +15,10 @@ class StudentRemoteDataSource {
   }
 
   //! Get student by ID
-  Future<Student?> getStudentById(int id) async {
-    final querySnapshot = await firestore
-        .collection('students')
-        .where('id', isEqualTo: id)
-        .limit(1)
-        .get();
+  Future<Student?> getStudentById(String id) async {
+    final querySnapshot = await firestore.collection('students').doc(id).get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      return Student.fromJson(querySnapshot.docs.first.data());
-    }
-    return null;
+    return Student.fromJson(querySnapshot.data()!);
   }
 
   //! Get student by name

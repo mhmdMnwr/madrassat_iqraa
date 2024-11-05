@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:madrassat_iqraa/core/admin/admin_state.dart';
 
 class Student extends Equatable {
-  final int? id;
   final String name;
   final String registrationDate;
   final String sex;
@@ -9,24 +9,28 @@ class Student extends Equatable {
   final bool payed;
   final DateTime createdAt;
 
-  const Student({
-    this.id,
+  Student({
     required this.name,
     required this.registrationDate,
     required this.sex,
     required this.isTeacher,
     required this.createdAt,
     required this.payed,
-  });
+  }) {
+    if (isTeacher) {
+      AdminStatsService().incrementTeacherCount();
+    } else {
+      AdminStatsService().incrementStudentCount();
+    }
+  }
 
   @override
   List<Object?> get props =>
-      [id, name, registrationDate, sex, isTeacher, createdAt, payed];
+      [name, registrationDate, sex, isTeacher, createdAt, payed];
 
   // Factory constructor to create a Student instance from JSON
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      id: json['id'] as int?,
       name: json['name'] as String,
       registrationDate: json['registrationDate'] as String,
       sex: json['sex'] as String,
@@ -40,7 +44,6 @@ class Student extends Equatable {
   // Method to convert a Student instance to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'name': name,
       'registrationDate': registrationDate,
       'sex': sex,
