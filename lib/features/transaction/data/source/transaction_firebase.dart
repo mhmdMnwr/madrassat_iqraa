@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
-import 'package:madrassat_iqraa/features/transaction/data/model/user_model.dart';
 
 class TransactionsRemoteDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+//!createTransaction
   Future<void> createTransaction(Transactions transaction) async {
     await _firestore.collection('transactions').add(transaction.toJson());
   }
 
+//!getAllTransactions
   Future<List<Transactions>> getAllTransactions() async {
     final querySnapshot = await _firestore.collection('transactions').get();
     return querySnapshot.docs
@@ -16,6 +17,7 @@ class TransactionsRemoteDataSource {
         .toList();
   }
 
+//!getLastMonthTransactions
   Future<List<Transactions>> getLastMonthTransactions() async {
     final DateTime lastMonth = DateTime.now().subtract(Duration(days: 30));
     final querySnapshot = await _firestore
@@ -27,6 +29,7 @@ class TransactionsRemoteDataSource {
         .toList();
   }
 
+//!getLastMonthByUser
   Future<List<Transactions>> getLastMonthByUser(String userId) async {
     final DateTime lastMonth = DateTime.now().subtract(Duration(days: 30));
     final querySnapshot = await _firestore
@@ -39,6 +42,7 @@ class TransactionsRemoteDataSource {
         .toList();
   }
 
+//!getLastMonthByType
   Future<List<Transactions>> getLastMonthByType(bool transactionType) async {
     final DateTime lastMonth = DateTime.now().subtract(Duration(days: 30));
     final querySnapshot = await _firestore
@@ -51,6 +55,7 @@ class TransactionsRemoteDataSource {
         .toList();
   }
 
+//!getByUser
   Future<List<Transactions>> getByUser(String user) async {
     final querySnapshot = await _firestore
         .collection('transactions')
@@ -61,6 +66,7 @@ class TransactionsRemoteDataSource {
         .toList();
   }
 
+//!gettransactionbyid
   Future<Transactions> gettransactionbyid(String id) async {
     final docSnapshot =
         await _firestore.collection('transactions').doc(id).get();
@@ -68,6 +74,7 @@ class TransactionsRemoteDataSource {
     return Transactions.fromJson(docSnapshot.data()!);
   }
 
+//!getByType
   Future<List<Transactions>> getByType(bool transactionType) async {
     final querySnapshot = await _firestore
         .collection('transactions')
@@ -76,17 +83,5 @@ class TransactionsRemoteDataSource {
     return querySnapshot.docs
         .map((doc) => Transactions.fromJson(doc.data()))
         .toList();
-  }
-
-  //! this is the user fuctions
-
-  Future<void> createUser(User user) async {
-    await _firestore.collection('User').add(user.toJson());
-  }
-
-  Future<User> getUserById(String id) async {
-    final docSnapshot = await _firestore.collection('User').doc(id).get();
-
-    return User.fromJson(docSnapshot.data()!);
   }
 }

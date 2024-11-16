@@ -6,20 +6,27 @@ import 'package:madrassat_iqraa/core/theme/colors.dart';
 
 Widget adminCounts() {
   return Positioned(
-    top: 185.h,
-    left: 22.w,
-    right: 22.w,
+    top: 219.h,
+    left: 30.w,
+    right: 30.w,
+    height: 115.h,
     child: Container(
-      padding: EdgeInsets.fromLTRB(15.w, 16.h, 15.w, 16.h),
-      height: 100.h,
+      padding: EdgeInsets.fromLTRB(3.w, 14.h, 3.w, 14.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(
+          11.sp,
+        ),
+        border: Border.all(
+          color: AppColors.goldenYellow,
+          width: 2.5.sp,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black26,
-            offset: Offset(0, 4),
-            blurRadius: 8,
+            color: Colors.black.withOpacity(0.2), // Subtle shadow color
+            offset: Offset(0, 3), // Horizontal and vertical offset
+            blurRadius: 6, // Amount of blur
+            spreadRadius: 4, // Spread of the shadow
           ),
         ],
       ),
@@ -27,19 +34,28 @@ Widget adminCounts() {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          nums(text: "totalFunds", text2: "الميزانية"),
+          nums(
+            text: "teacherCount",
+            text2: "عدد المعلمين",
+          ),
           VerticalDivider(
             color: Colors.black,
             thickness: 0.5,
-            width: 20.w,
+            width: 5.w,
           ),
-          nums(text: "teacherCount", text2: "المعلمون"),
+          nums(
+            text: "totalFunds",
+            text2: "مبلغ الميزانية",
+          ),
           VerticalDivider(
             color: Colors.black,
             thickness: 0.5,
-            width: 20.w,
+            width: 5.w,
           ),
-          nums(text: "studentCount", text2: "الطلبة"),
+          nums(
+            text: "studentCount",
+            text2: "عدد الطلاب",
+          ),
         ],
       ),
     ),
@@ -47,28 +63,37 @@ Widget adminCounts() {
 }
 
 Widget numHolder({
-  required int text,
+  bool da = false,
+  required dynamic text,
   required String text2,
 }) {
   return SizedBox(
-    width: 80.w,
-    height: 90.h,
+    width: 110.w,
+    height: 100.h,
     child: Column(
       children: [
-        Text(
-          text.toString(),
-          style: TextStyle(
-              fontFamily: AppStrings().fontfam,
-              fontWeight: FontWeight.w700,
-              fontSize: 20.sp,
-              color: AppColors().primaryText),
+        SizedBox(
+          height: 5.h,
         ),
         Text(
           text2,
           style: TextStyle(
-              fontFamily: AppStrings().fontfam,
-              fontWeight: FontWeight.w700,
-              color: AppColors().secondaryText),
+              fontFamily: AppStrings.fontfam,
+              fontWeight: FontWeight.w600,
+              fontSize: 20.sp,
+              color: AppColors.shadowBlue),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Text(
+          !da ? text.toString() : "${text.toString()} دج",
+          textDirection: TextDirection.rtl,
+          style: TextStyle(
+              fontFamily: AppStrings.fontfam,
+              fontWeight: FontWeight.w500,
+              fontSize: (da && text.toString().length > 5) ? 20.sp : 23.sp,
+              color: AppColors.skyBlue),
         ),
       ],
     ),
@@ -83,13 +108,17 @@ dynamic nums({
     future: AdminStatsService().getStats(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return CircularProgressIndicator(); // Show a loader while waiting
+        return numHolder(
+          text: "---",
+          text2: text2,
+        );
       } else if (snapshot.hasError) {
         return Text('Error: ${snapshot.error}');
       } else if (snapshot.hasData) {
         // Access the 'studentCount' from the map safely
         final count = snapshot.data?[text] ?? 0;
         return numHolder(
+          da: (text2 == "مبلغ الميزانية"),
           text: count,
           text2: text2,
         );

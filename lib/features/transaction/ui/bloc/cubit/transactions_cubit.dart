@@ -6,13 +6,13 @@ import 'package:madrassat_iqraa/features/transaction/data/repo/transaction_repo.
 part 'transactions_state.dart';
 
 class TransactionsCubit extends Cubit<TransactionsState> {
-  final TransactionsRepository _repository;
+  final TransactionsRepository repository;
 
-  TransactionsCubit(this._repository) : super(TransactionsInitial());
+  TransactionsCubit({required this.repository}) : super(TransactionsInitial());
 
   Future<void> fetchAllTransactions() async {
     emit(TransactionsLoading());
-    final result = await _repository.getAllTransactions();
+    final result = await repository.getAllTransactions();
     result.fold(
       (error) => emit(TransactionsError(error)),
       (transactions) => emit(TransactionsLoaded(transactions)),
@@ -21,7 +21,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> fetchLastMonthTransactions() async {
     emit(TransactionsLoading());
-    final result = await _repository.getLastMonthTransactions();
+    final result = await repository.getLastMonthTransactions();
     result.fold(
       (error) => emit(TransactionsError(error)),
       (transactions) => emit(TransactionsLoaded(transactions)),
@@ -30,7 +30,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> fetchLastMonthByUser(String userId) async {
     emit(TransactionsLoading());
-    final result = await _repository.getLastMonthByUser(userId);
+    final result = await repository.getLastMonthByUser(userId);
     result.fold(
       (error) => emit(TransactionsError(error)),
       (transactions) => emit(TransactionsLoaded(transactions)),
@@ -39,7 +39,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> fetchLastMonthByType(bool type) async {
     emit(TransactionsLoading());
-    final result = await _repository.getLastMonthByType(type);
+    final result = await repository.getLastMonthByType(type);
     result.fold(
       (error) => emit(TransactionsError(error)),
       (transactions) => emit(TransactionsLoaded(transactions)),
@@ -48,7 +48,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> fetchByUser(String userId) async {
     emit(TransactionsLoading());
-    final result = await _repository.getByUser(userId);
+    final result = await repository.getByUser(userId);
     result.fold(
       (error) => emit(TransactionsError(error)),
       (transactions) => emit(TransactionsLoaded(transactions)),
@@ -57,7 +57,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> fetchByType(bool type) async {
     emit(TransactionsLoading());
-    final result = await _repository.getByType(type);
+    final result = await repository.getByType(type);
     result.fold(
       (error) => emit(TransactionsError(error)),
       (transactions) => emit(TransactionsLoaded(transactions)),
@@ -66,7 +66,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> createTransaction(Transactions transaction) async {
     emit(TransactionsLoading());
-    final result = await _repository.createTransaction(transaction);
+    final result = await repository.createTransaction(transaction);
     result.fold(
       (error) => emit(TransactionsError(error)),
       (_) => emit(

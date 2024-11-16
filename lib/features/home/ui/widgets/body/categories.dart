@@ -1,93 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 
 Widget categories() {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 12.w),
+    padding: EdgeInsets.symmetric(horizontal: 30.w),
     child: GridView.builder(
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Number of columns
-        crossAxisSpacing: 12.w, // Spacing between columns
-        mainAxisSpacing: 12.w, // Spacing between rows
-        childAspectRatio: 0.905.sp, // Adjust the aspect ratio as needed
+        crossAxisSpacing: 22.w, // Spacing between columns
+        mainAxisSpacing: 22.w, // Spacing between rows
+        childAspectRatio: 1.11.sp, // Adjust the aspect ratio as needed
       ),
-      padding: EdgeInsets.symmetric(horizontal: 10.w),
-      itemCount: 6,
+      itemCount: 5,
       itemBuilder: (context, index) {
-        return Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(11.sp),
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 1.2,
-                      spreadRadius: 0.5,
-                      color: AppColors().primary)
-                ]),
-            child: gridsComponent(
-                icon: homePageIcons[index], text: homePageTitles[index]));
+        return gridsBorder(index: index);
       },
     ),
   );
 }
 
-Widget gridsComponent({required String text, required IconData icon}) {
+Widget gridsBorder({required int index}) {
   return Container(
-    margin: EdgeInsets.fromLTRB(5.sp, 5.sp, 5.sp, 10.sp),
-    alignment: Alignment.center,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          height: 120.h,
-          width: 200.w,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.sp),
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 1.2,
-                    spreadRadius: 0.5,
-                    color: AppColors().primary)
-              ]),
-          child: Icon(
-            icon,
-            color: Colors.blue,
-            size: 80.sp,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(
+          15.sp,
+        ),
+        border: Border(
+          top: BorderSide(
+            color: Colors.black,
+            width: 0.6.sp,
+          ),
+          bottom: BorderSide(
+            color: Colors.black,
+            width: 0.6.sp,
           ),
         ),
-        SizedBox(
-          height: 5.h,
-        ),
-        Container(
-          height: 30.h,
-          child: Text(
-            text,
-            style: AppTextStyle().categories,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2), // Subtle shadow color
+            offset: Offset(0, 3), // Horizontal and vertical offset
+            blurRadius: 6, // Amount of blur
+            spreadRadius: 4, // Spread of the shadow
+          ),
+        ],
+      ),
+      child: gridsComponent(
+          imagePath: homePageImages[index], text: homePageTitles[index]));
+}
+
+Widget gridsComponent({required String text, required String imagePath}) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      Center(
+        child: SizedBox(
+          height: 80.h,
+          width: 80.w,
+          child: Image.asset(
+            imagePath,
           ),
         ),
-      ],
-    ),
+      ),
+      SizedBox(
+        height: (text != "سجل المعلمين") ? 10.h : 20.h,
+      ),
+      Container(
+        padding: EdgeInsets.only(bottom: 15.h),
+        height: 45.h,
+        child: Text(
+          text,
+          style: AppTextStyle.categories,
+        ),
+      ),
+    ],
   );
 }
 
-List<IconData> homePageIcons = [
-  Icons.school,
-  Icons.badge,
-  Icons.volunteer_activism,
-  Icons.attach_money,
-  Icons.app_registration,
-  Icons.receipt_long,
+List<String> homePageImages = [
+  "assets/images/homepage1.png",
+  "assets/images/homepage2.png",
+  "assets/images/homepage3.png",
+  "assets/images/homepage4.png",
+  "assets/images/homepage5.png",
 ];
 List<String> homePageTitles = [
-  "قائمة الطلبة",
-  "قائمة المعلمين",
-  "التبرعات",
-  "النفقات",
-  "السجل",
-  "سجل التسجيلات",
+  "سجل الطلاب",
+  "سجل المعلمين",
+  "المصاريف الشهرية",
+  "التبرعات الشهرية",
+  "سجل المعاملات المالية",
 ];

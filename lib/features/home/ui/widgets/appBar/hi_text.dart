@@ -5,28 +5,29 @@ import 'package:madrassat_iqraa/core/theme/colors.dart';
 
 Widget hiText() {
   return Positioned(
-    top: 80.h,
-    right: 90.w,
+    top: 100.h,
+    right: 20.w,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         SizedBox(
           child: Text(
-            "مرحبا بك",
+            "السلام عليكم",
             style: TextStyle(
-                fontFamily: AppStrings().fontfam,
-                fontWeight: FontWeight.w600,
-                color: AppColors().background,
-                fontSize: 23.sp),
+                fontFamily: AppStrings.fontfam,
+                fontWeight: FontWeight.w400,
+                color: AppColors.background,
+                fontSize: 26.sp),
           ),
         ),
         SizedBox(
           child: Text(
             "عامر محمد منور",
             style: TextStyle(
-                fontFamily: AppStrings().fontfam,
-                fontWeight: FontWeight.w600,
+                fontFamily: AppStrings.fontfam,
+                fontWeight: FontWeight.w400,
                 color: Colors.white,
-                fontSize: 25.sp),
+                fontSize: 28.sp),
           ),
         ),
       ],

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:madrassat_iqraa/core/theme/colors.dart';
-import 'package:icons_plus/icons_plus.dart';
 
 NavigationBarTheme myNavBar(
     {required int selectedIndex, required dynamic onItemTapped}) {
@@ -63,12 +61,12 @@ NavigationDestination myNavDestination(
       icon: Icon(
         inActiveIcon,
         size: 25.sp,
-        color: NavBar().inactive,
+        // color: NavBar().inactive,
       ),
       selectedIcon: Icon(
         activeIcon,
         size: 27.sp,
-        color: AppColors().accent,
+        // color: AppColors().accent,
       ),
       label: label,
     );

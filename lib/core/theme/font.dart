@@ -4,16 +4,10 @@ import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 
 class AppTextStyle {
-  TextStyle primary = TextStyle(
-    fontFamily: AppStrings().fontfam,
-    fontWeight: FontWeight.w800,
-    color: Colors.black,
-    fontSize: 16.sp,
-  );
-  TextStyle categories = TextStyle(
-    fontFamily: AppStrings().fontfam,
-    fontWeight: FontWeight.w800,
-    color: Colors.black,
-    fontSize: 18.sp,
+  static TextStyle categories = TextStyle(
+    fontFamily: AppStrings.fontfam,
+    fontWeight: FontWeight.w600,
+    color: AppColors.navyBlue,
+    fontSize: 20.sp,
   );
 }

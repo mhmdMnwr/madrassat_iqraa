@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Color curvedAppBar = Color.fromARGB(255, 0, 38, 121);
-  Color curvedAppBar = Color.fromARGB(255, 243, 162, 86);
-  // Primary color for main elements (e.g., active icons, headers, buttons)
-  Color primary = Color(0xFF5D5FEF); // Indigo blue
+  // Primary Colors
+  static const Color richRed = Color(0xFFC62E2E); // Main red theme
+  static const Color vibrantOrange = Color(0xFFEB8317); // Accent orange theme
+  static const Color goldenYellow = Color(0xFFF3C623); // Highlight yellow theme
 
-  // Secondary color for highlights and selected states
-  Color secondary = Color(0xFFFFB020); // Amber
+  // Secondary Colors
+  static const Color forestGreen = Color(0xFF00712D); // Positive/Success green
+  static const Color greyBlue = Color(0xFF6A9AB0); // Neutral/Calm blue
+  static const Color deepBlue = Color(0xFF3A6D8C); // Deep calm blue
 
-  // Accent color for subtle details and secondary actions
-  Color accent = Color(0xFF009688); // Teal
+  // Accent Colors
+  static const Color navyBlue = Color(0xFF003161); // Primary dark blue
+  static const Color skyBlue = Color(0xFF024CAA); // Bright azure accent
 
-  // Background color for a clean app appearance
-  Color background = Color(0xE5E5E5E5); // Light grey
+  // Dark Theme Colors
+  static const Color midnightBlue = Color(0xFF091057); // Deep midnight theme
+  static const Color shadowBlue = Color(0xFF001F3F); // Shadow/Background
 
-  // Error color for error messages and warnings
-  Color error = Color(0xFFFF5252); // Red
-
-  // Text color for primary content
-  Color primaryText = Colors.black87;
-
-  // Text color for secondary content
-  Color secondaryText = Colors.black54;
+  static const Color background = Color(0xE5E5E5E5);
 }
