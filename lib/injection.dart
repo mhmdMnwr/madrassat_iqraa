@@ -12,7 +12,6 @@ import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student
 import 'package:madrassat_iqraa/features/transaction/data/repo/transaction_repo.dart';
 import 'package:madrassat_iqraa/features/transaction/data/source/transaction_firebase.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/bloc/cubit/transactions_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -29,28 +28,38 @@ Future<void> setupInjection() async {
     () => InternetConnectionChecker(),
   );
 
-  //! Register SharedPreferences for local storage
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  //! Register UserLocalDataSource
+  getIt.registerLazySingleton<UserLocalDataSource>(
+    () => UserLocalDataSource(),
+  );
 
-  //! Register student  Data Sources
+  //! Register UserRemoteDataSource
+  getIt.registerLazySingleton<UserRemoteDataSource>(
+    () => UserRemoteDataSource(firestore: getIt<FirebaseFirestore>()),
+  );
+
+  //! Register UserRepository
+  getIt.registerLazySingleton<UserRepository>(
+    () => UserRepository(
+      localDataSource: getIt<UserLocalDataSource>(),
+      remoteDataSource: getIt<UserRemoteDataSource>(),
+      connectionChecker: getIt<InternetConnectionChecker>(),
+    ),
+  );
+
+  //! Register UserCubit
+  getIt.registerFactory<UserCubit>(
+    () => UserCubit(userRepository: getIt<UserRepository>()),
+  );
+
+  //! Register student Data Sources
   getIt.registerLazySingleton<StudentRemoteDataSource>(
     () => StudentRemoteDataSource(firestore: getIt<FirebaseFirestore>()),
   );
 
-  //! Register transaction  Data Sources
+  //! Register transaction Data Sources
   getIt.registerLazySingleton<TransactionsRemoteDataSource>(
     () => TransactionsRemoteDataSource(firestore: getIt<FirebaseFirestore>()),
-  );
-
-  //! User local data sources
-  getIt.registerLazySingleton<UserLocalDataSource>(
-    () => UserLocalDataSource(), // Pass SharedPreferences instance
-  );
-
-  //!user remote data source
-  getIt.registerLazySingleton<UserRemoteDataSource>(
-    () => UserRemoteDataSource(firestore: getIt<FirebaseFirestore>()),
   );
 
   //! Register student Repositories
@@ -69,27 +78,14 @@ Future<void> setupInjection() async {
     ),
   );
 
-  //! user repository
-  getIt.registerLazySingleton<UserRepository>(
-    () => UserRepository(
-      localDataSource: getIt<UserLocalDataSource>(),
-      remoteDataSource: getIt<UserRemoteDataSource>(),
-      connectionChecker: getIt<InternetConnectionChecker>(),
-    ),
-  );
-
-  //! Register student  Cubits
+  //! Register student Cubits
   getIt.registerFactory<StudentCubit>(
     () => StudentCubit(repository: getIt<StudentRepository>()),
   );
 
-  //! Register transaction  Cubits
+  //! Register transaction Cubits
   getIt.registerFactory<TransactionsCubit>(
     () => TransactionsCubit(repository: getIt<TransactionsRepository>()),
-  );
-//! register user cubit
-  getIt.registerFactory<UserCubit>(
-    () => UserCubit(userRepository: getIt<UserRepository>()),
   );
 
   // Register other services, repositories, and cubits as needed.

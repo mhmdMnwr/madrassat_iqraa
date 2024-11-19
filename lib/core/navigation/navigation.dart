@@ -1,69 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:madrassat_iqraa/core/navigation/bottom_navigation_bar.dart';
-import 'package:madrassat_iqraa/core/navigation/router.dart';
 
-class Navigation extends StatefulWidget {
-  const Navigation({super.key});
-
-  @override
-  State<Navigation> createState() => _NavigationState();
-}
-
-class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        context.go('/home');
-        break;
-      case 1:
-        context.go('/search');
-        break;
-      case 2:
-        context.go('/create');
-        break;
-      case 3:
-        context.go('/transactions');
-        break;
-      case 4:
-        context.go('/add_remove_money');
-        break;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _getSelectedPage(),
-      ),
-      bottomNavigationBar:
-          myNavBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
-    );
-  }
-
-  Widget _getSelectedPage() {
-    switch (_selectedIndex) {
-      case 0:
-        return const HomePage(); // Replace with your actual Home Page widget
-      case 1:
-        return const SearchPage(); // Replace with your Search Page widget
-      case 2:
-        return const CreatePage(); // Replace with your Create Page widget
-      case 3:
-        return const TransactionRegisterPage(); // Replace with your Transaction Register Page widget
-      case 4:
-        return const AddRemoveMoneyPage(); // Replace with your Add/Remove Money Page widget
-      default:
-        return Container(
-          color: Colors.grey,
-        );
-    }
+void navigateToPage(BuildContext context, String pageName) {
+  switch (pageName) {
+    case 'home':
+      context.push('/home');
+      break;
+    case 'studentsList':
+      context.push('/studentsList');
+      break;
+    case 'teachersList':
+      context.push('/teachersList');
+      break;
+    case 'expenses':
+      context.push('/expenses');
+      break;
+    case 'income':
+      context.push('/income');
+      break;
+    case 'transaction':
+      context.push('/transaction');
+      break;
+    default:
+      context.push('/');
   }
 }
+
+const List<String> pageNames = [
+  'studentsList',
+  'teachersList',
+  'expenses',
+  'income',
+  'transaction',
+];

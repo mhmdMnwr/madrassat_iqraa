@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/navigation/router.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/admin_counts.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/curved_appbar.dart';
@@ -21,15 +22,15 @@ class MyApp extends StatelessWidget {
       designSize: const Size(412, 903),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        home: HomeScreen(),
+        routerConfig: router,
       ),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

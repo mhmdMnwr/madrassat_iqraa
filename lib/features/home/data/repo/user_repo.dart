@@ -3,18 +3,19 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:madrassat_iqraa/core/error/error_message.dart';
 import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
 import 'package:madrassat_iqraa/features/home/data/source/user_database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:madrassat_iqraa/features/home/data/source/local_data_source.dart';
 
 class UserRepository {
   final UserRemoteDataSource _remoteDataSource;
+  final UserLocalDataSource _localDataSource;
   final InternetConnectionChecker _connectionChecker;
-
-  static const String _userIdKey = 'user_id';
 
   UserRepository({
     required UserRemoteDataSource remoteDataSource,
+    required UserLocalDataSource localDataSource,
     required InternetConnectionChecker connectionChecker,
   })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource,
         _connectionChecker = connectionChecker;
 
   // Helper method to check for internet connectivity
@@ -26,9 +27,8 @@ class UserRepository {
   Future<Either<String, User?>> getUserById() async {
     if (await _hasConnection()) {
       try {
-        // Retrieve the cached user ID from SharedPreferences
-        final prefs = await SharedPreferences.getInstance();
-        final cachedUserId = prefs.getString(_userIdKey);
+        // Retrieve the cached user ID from UserLocalDataSource
+        final cachedUserId = await _localDataSource.getUserId();
 
         if (cachedUserId == null) {
           return Left('User ID not found in local cache.');
@@ -49,9 +49,8 @@ class UserRepository {
   Future<Either<String, void>> saveUserId(String userId) async {
     if (await _hasConnection()) {
       try {
-        // Save the user ID to SharedPreferences
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(_userIdKey, userId);
+        // Save the user ID to UserLocalDataSource
+        await _localDataSource.saveUserId(userId);
         return const Right(null);
       } catch (e) {
         return Left(ordinaryError);
@@ -68,7 +67,7 @@ class UserRepository {
         // Create the user in the remote data source
         await _remoteDataSource.createUser(user);
 
-        // Save the user ID in SharedPreferences
+        // Save the user ID in UserLocalDataSource
         await saveUserId(user.id);
         return const Right(null);
       } catch (e) {
@@ -94,9 +93,8 @@ class UserRepository {
     }
   }
 
-  //! Check if a user ID exists in SharedPreferences
+  //! Check if a user ID exists in UserLocalDataSource
   Future<bool> hasUserId() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(_userIdKey);
+    return await _localDataSource.hasUserId();
   }
 }

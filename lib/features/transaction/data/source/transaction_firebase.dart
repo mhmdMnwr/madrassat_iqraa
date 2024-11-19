@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
 
 class TransactionsRemoteDataSource {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+
+  TransactionsRemoteDataSource({required FirebaseFirestore firestore})
+      : _firestore = firestore;
 
 //!createTransaction
   Future<void> createTransaction(Transactions transaction) async {
