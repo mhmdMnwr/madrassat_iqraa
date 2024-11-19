@@ -5,6 +5,7 @@ import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/home_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/login_page.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/students_page.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/teachers_page.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/pages/expenses_page.dart';
@@ -28,7 +29,10 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: '/studentsList',
-        builder: (context, state) => const StudentsPage()),
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<StudentCubit>(),
+              child: StudentsPage(),
+            )),
     GoRoute(
         path: '/teachersList',
         builder: (context, state) => const TeachersPage()),

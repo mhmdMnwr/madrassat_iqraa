@@ -8,6 +8,18 @@ class Student extends Equatable {
   final String birthDate;
   final String sex;
   final bool isTeacher;
+  int get age {
+    final birthDateParsed = DateTime.parse(birthDate);
+    final today = DateTime.now();
+    int age = today.year - birthDateParsed.year;
+    if (today.month < birthDateParsed.month ||
+        (today.month == birthDateParsed.month &&
+            today.day < birthDateParsed.day)) {
+      age--;
+    }
+    return age;
+  }
+
   final bool payed;
   final DateTime createdAt;
 

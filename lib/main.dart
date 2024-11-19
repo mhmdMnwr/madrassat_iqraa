@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/navigation/router.dart';
-import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
-import 'package:madrassat_iqraa/features/home/ui/pages/login_page.dart';
 import 'package:madrassat_iqraa/injection.dart';
 
 Future<void> main() async {
@@ -13,6 +10,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(

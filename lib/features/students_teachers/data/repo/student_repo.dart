@@ -24,7 +24,7 @@ class StudentRepository {
   Future<Either<String, List<Student?>>> getAllStudents() async {
     if (await _hasConnection()) {
       try {
-        final students = await _dataSource.getStudentsByNamePrefix("test");
+        final students = await _dataSource.getAllStudents();
         return Right(students);
       } catch (e) {
         return Left(ordinaryError);

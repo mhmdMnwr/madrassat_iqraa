@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/theme/icons.dart';
 
 Widget logo() {
   return Positioned(
@@ -22,7 +23,7 @@ Widget logo() {
           width: 12.w,
         ),
         Image.asset(
-          'assets/images/logo.png',
+          AppIcons.logo,
           height: 50.h,
           width: 50.w,
         ),

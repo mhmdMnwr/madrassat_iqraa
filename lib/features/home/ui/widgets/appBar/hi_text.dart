@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 
 class HiText extends StatefulWidget {
@@ -51,11 +52,7 @@ Widget _blocBuilder() =>
       if (state is UserLoaded) {
         return Text(
           state.user.userName,
-          style: TextStyle(
-              fontFamily: AppStrings.fontfam,
-              fontWeight: FontWeight.w400,
-              color: Colors.white,
-              fontSize: 28.sp),
+          style: AppTextStyle.titles,
         );
       } else if (state is UserLoading) {
         {

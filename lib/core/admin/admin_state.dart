@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdminStatsService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final DocumentReference _statsDoc =
       FirebaseFirestore.instance.collection('adminData').doc('schoolStats');
 

@@ -10,4 +10,19 @@ class AppTextStyle {
     color: AppColors.navyBlue,
     fontSize: 20.sp,
   );
+  static TextStyle titles = TextStyle(
+      fontFamily: AppStrings.fontfam,
+      fontWeight: FontWeight.w400,
+      color: Colors.white,
+      fontSize: 28.sp);
+  static TextStyle subTitles = TextStyle(
+      fontFamily: AppStrings.fontfam,
+      fontWeight: FontWeight.w700,
+      color: AppColors.skyBlue,
+      fontSize: 22.sp);
+  static TextStyle text = TextStyle(
+      fontFamily: AppStrings.fontfam,
+      fontWeight: FontWeight.w700,
+      color: Colors.black,
+      fontSize: 16.sp);
 }

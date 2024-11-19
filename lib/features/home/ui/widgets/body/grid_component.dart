@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
+import 'package:madrassat_iqraa/core/theme/icons.dart';
 
 Widget gridsBorder({required int index}) {
   return Container(
@@ -62,16 +64,16 @@ Widget gridsComponent({required String text, required String imagePath}) {
 }
 
 List<String> homePageImages = [
-  "assets/images/homepage1.png",
-  "assets/images/homepage2.png",
-  "assets/images/homepage3.png",
-  "assets/images/homepage4.png",
-  "assets/images/homepage5.png",
+  AppIcons.homepage1,
+  AppIcons.homepage2,
+  AppIcons.homepage3,
+  AppIcons.homepage4,
+  AppIcons.homepage5,
 ];
 List<String> homePageTitles = [
-  "سجل الطلاب",
-  "سجل المعلمين",
-  "المصاريف الشهرية",
-  "التبرعات الشهرية",
-  "سجل المعاملات المالية",
+  AppPagesNames.studentsList,
+  AppPagesNames.teachersList,
+  AppPagesNames.expenses,
+  AppPagesNames.incomes,
+  AppPagesNames.transactions,
 ];

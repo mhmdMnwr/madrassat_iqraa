@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
-import 'package:madrassat_iqraa/injection.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

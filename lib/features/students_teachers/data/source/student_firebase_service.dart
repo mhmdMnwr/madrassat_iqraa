@@ -8,10 +8,16 @@ class StudentRemoteDataSource {
 
   //! Get all students
   Future<List<Student>> getAllStudents() async {
-    final querySnapshot = await firestore.collection('students').get();
-    return querySnapshot.docs
-        .map((doc) => Student.fromJson(doc.data()))
-        .toList();
+    try {
+      final querySnapshot = await firestore.collection('students').get();
+      return querySnapshot.docs
+          .map((doc) => Student.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      // Handle any errors that occur during the fetch
+      print('Error fetching students: $e');
+      return [];
+    }
   }
 
   //! Get student by ID

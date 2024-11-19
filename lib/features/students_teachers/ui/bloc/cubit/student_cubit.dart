@@ -13,10 +13,11 @@ class StudentCubit extends Cubit<StudentState> {
   // Load all students
   Future<void> loadStudents() async {
     emit(StudentLoading());
-    final result = await _repository.getStudentsBypayed();
+    final result = await _repository.getAllStudents();
     result.fold(
       (failure) => emit(StudentError(message: failure)),
-      (students) => emit(StudentLoaded(students: students)),
+      (students) =>
+          emit(StudentLoaded(students: students.whereType<Student>().toList())),
     );
   }
 
