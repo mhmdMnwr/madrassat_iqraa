@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
+import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/home_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/login_page.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/students_page.dart';
@@ -13,8 +14,18 @@ import 'package:madrassat_iqraa/injection.dart';
 
 final GoRouter router = GoRouter(
   routes: [
-    GoRoute(path: '/', builder: (context, state) => MainPage()),
-    GoRoute(path: '/home', builder: (context, state) => HomePage()),
+    GoRoute(
+        path: '/',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<UserCubit>(),
+              child: MainPage(),
+            )),
+    GoRoute(
+        path: '/home',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<UserCubit>(),
+              child: HomePage(),
+            )),
     GoRoute(
         path: '/studentsList',
         builder: (context, state) => const StudentsPage()),

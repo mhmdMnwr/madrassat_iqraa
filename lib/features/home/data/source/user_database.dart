@@ -9,12 +9,16 @@ class UserRemoteDataSource {
 
   // Fetch user by ID from Firebase
   Future<User?> getUserById(String userId) async {
-    final userDoc = await firestore.collection('users').doc(userId).get();
+    final querySnapshot = await firestore
+        .collection('users')
+        .where('id', isEqualTo: userId)
+        .get();
 
-    if (userDoc.exists) {
-      return User.fromJson(userDoc.data()!);
+    if (querySnapshot.docs.isNotEmpty) {
+      return User.fromJson(querySnapshot.docs.first.data());
+    } else {
+      return null;
     }
-    return null;
   }
 
   // Create a new user in Firebase

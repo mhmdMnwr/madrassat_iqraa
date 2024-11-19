@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
 import 'package:madrassat_iqraa/injection.dart';
@@ -30,6 +31,10 @@ class _LoginPageState extends State<LoginPage> {
       final user = User(userName: userName);
       context.read<UserCubit>().createUser(user);
     }
+  }
+
+  _navigateToHomePage() {
+    navigateToPage(context, 'home');
   }
 
   @override
@@ -76,9 +81,11 @@ class _LoginPageState extends State<LoginPage> {
                       SnackBar(content: Text('Loading...')),
                     );
                   } else if (state is UserCreated) {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('User created successfully')),
                     );
+                    _navigateToHomePage();
                   } else if (state is UserError) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Error: ${state.message}')),

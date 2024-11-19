@@ -41,4 +41,24 @@ class UserCubit extends Cubit<UserState> {
           UserCreated()), // Emit a separate state indicating user creation success
     );
   }
+
+  // Future<String> getUserId() async {
+  //   emit(UserLoading());
+  //   final result = await userRepository.getUserId();
+  //   return result.fold(
+  //     (error) {
+  //       emit(UserError(error));
+  //       return 'masabahch';
+  //     },
+  //     (userId) {
+  //       if (userId != null) {
+  //         emit(IdLoaded(userId));
+  //         return userId;
+  //       } else {
+  //         emit(UserError('User not found'));
+  //         return 'null';
+  //       }
+  //     },
+  //   );
+  // }
 }

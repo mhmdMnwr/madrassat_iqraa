@@ -19,13 +19,9 @@ class MyApp extends StatelessWidget {
       designSize: const Size(412, 903),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(
+      child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        // routerConfig: router,
-        home: BlocProvider(
-          create: (context) => getIt<UserCubit>(),
-          child: LoginPage(),
-        ),
+        routerConfig: router,
       ),
     );
   }

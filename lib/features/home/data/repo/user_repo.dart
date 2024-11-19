@@ -45,6 +45,23 @@ class UserRepository {
     }
   }
 
+  // Future<Either<String, String?>> getUserId() async {
+  //   if (await _hasConnection()) {
+  //     // Retrieve the cached user ID from UserLocalDataSource
+  //     final cachedUserId = await _localDataSource.getUserId();
+
+  //     if (cachedUserId == null) {
+  //       return Left('User ID not found in local cache.');
+  //     } else {
+  //       return Right(cachedUserId);
+  //     }
+
+  //     // Fetch the user details from the remote data source
+  //   } else {
+  //     return Left(noConnctionError);
+  //   }
+  // }
+
   //! Save user ID to local cache
   Future<Either<String, void>> saveUserId(String userId) async {
     if (await _hasConnection()) {

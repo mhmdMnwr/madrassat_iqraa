@@ -12,6 +12,12 @@ class UserLoaded extends UserState {
   UserLoaded(this.user);
 }
 
+// class IdLoaded extends UserState {
+//   final String userId;
+
+//   IdLoaded(this.userId);
+// }
+
 class UserSaved extends UserState {} // State when user ID is successfully saved
 
 class UserCreated
