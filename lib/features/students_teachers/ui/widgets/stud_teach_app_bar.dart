@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/core/theme/icons.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
@@ -7,6 +8,8 @@ import 'package:madrassat_iqraa/core/theme/colors.dart';
 class StudTeachAppBar extends AppBar {
   StudTeachAppBar({
     super.key,
+    bool search = false,
+    bool isteacher = false,
     required String title,
     required context,
     //  VoidCallback onSearchPressed,
@@ -24,10 +27,18 @@ class StudTeachAppBar extends AppBar {
               ),
             ],
           ),
-          leading: IconButton(
-            icon: Image.asset(AppIcons.search),
-            onPressed: () {},
-          ),
+          leading: !search
+              ? IconButton(
+                  icon: Image.asset(AppIcons.search),
+                  onPressed: () {
+                    if (isteacher) {
+                      navigateToPage(context, "searchTeacher");
+                    } else {
+                      navigateToPage(context, "searchStudent");
+                    }
+                  },
+                )
+              : Container(),
           actions: [
             IconButton(
               icon: Image.asset(AppIcons.back1),

@@ -4,6 +4,7 @@ import 'package:madrassat_iqraa/core/helper/id_generator.dart';
 
 class Student extends Equatable {
   final String name;
+  final int money;
   final String id;
   final String birthDate;
   final String sex;
@@ -26,6 +27,7 @@ class Student extends Equatable {
   Student({
     String? id,
     required this.name,
+    this.money = 0,
     required this.birthDate,
     required this.sex,
     required this.isTeacher,
@@ -47,6 +49,7 @@ class Student extends Equatable {
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
       name: json['name'] as String,
+      money: json['money'] as int,
       id: json['id'] as String,
       birthDate: json['birthDate'] as String,
       sex: json['sex'] as String,
@@ -61,6 +64,7 @@ class Student extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'money': money,
       'id': id,
       'registrationDate': birthDate,
       'sex': sex,

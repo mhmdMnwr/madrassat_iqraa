@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 
-Widget curvedAppBar() {
+Widget curvedAppBar(int height) {
   return ClipPath(
     clipper: CurvedAppBarClipper(),
     child: Container(
-      height: 269.h,
+      height: height.h,
       color: AppColors.shadowBlue,
     ),
   );

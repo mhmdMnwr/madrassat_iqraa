@@ -49,11 +49,16 @@ class StudentRepository {
   }
 
   // Get student by name with error handling
-  Future<Either<String, List<Student>>> getStudentsByNamePrefix(
-      String namePrefix) async {
+  Future<Either<String, List<Student>>> getStudentsByName(
+    String name, {
+    bool isteacher = false,
+  }) async {
     if (await _hasConnection()) {
       try {
-        final students = await _dataSource.getStudentsByNamePrefix(namePrefix);
+        final students = await _dataSource.getStudentsByNamePrefix(
+          name,
+          isteacher: isteacher,
+        );
         return Right(students);
       } catch (e) {
         return Left(ordinaryError);
@@ -68,7 +73,8 @@ class StudentRepository {
       {bool isTeacher = true}) async {
     if (await _hasConnection()) {
       try {
-        final students = await _dataSource.getStudentsByIsTeacher();
+        final students =
+            await _dataSource.getStudentsByIsTeacher(isTeacher: isTeacher);
         return Right(students);
       } catch (e) {
         return Left(ordinaryError);

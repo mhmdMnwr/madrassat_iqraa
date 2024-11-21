@@ -22,6 +22,16 @@ class StudentLoaded extends StudentState {
   List<Object?> get props => [students];
 }
 
+// State when data is successfully loaded
+class SearchedStudentLoaded extends StudentState {
+  final List<Student> students;
+
+  const SearchedStudentLoaded({required this.students});
+
+  @override
+  List<Object?> get props => [students];
+}
+
 // State when there is an error
 class StudentError extends StudentState {
   final String message;

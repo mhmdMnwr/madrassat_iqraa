@@ -6,8 +6,10 @@ import 'package:madrassat_iqraa/features/students_teachers/data/model/student_mo
 
 class UserInfoCard extends StatelessWidget {
   final Student student;
+  final bool isteacher;
 
-  const UserInfoCard({super.key, required this.student});
+  const UserInfoCard(
+      {super.key, required this.student, required this.isteacher});
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +54,18 @@ class UserInfoCard extends StatelessWidget {
 
                   // Registration Date
                   Text(
-                    student.sex,
+                    !isteacher
+                        ? student.sex
+                        : "المبلغ المستحق: ${student.money} دج",
                     style: AppTextStyle.text,
                     textAlign: TextAlign.right,
                   ),
 
                   // ID
                   Text(
-                    "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}",
+                    !isteacher
+                        ? "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}"
+                        : "تاريخ الانضمام: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}",
                     style: AppTextStyle.text,
                     textAlign: TextAlign.right,
                   ),

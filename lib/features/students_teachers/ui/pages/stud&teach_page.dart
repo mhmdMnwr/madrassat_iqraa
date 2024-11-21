@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
-import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
-import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/info.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/mylist.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/stud_teach_app_bar.dart';
 
-class StudentsPage extends StatefulWidget {
-  StudentsPage({super.key});
+class StudentsTeachersPage extends StatefulWidget {
+  final bool isteacher;
+  const StudentsTeachersPage({super.key, required this.isteacher});
 
   @override
-  State<StudentsPage> createState() => _StudentsPageState();
+  State<StudentsTeachersPage> createState() => _StudentsTeachersPageState();
 }
 
-class _StudentsPageState extends State<StudentsPage> {
+class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
   @override
   void initState() {
     super.initState();
-    context.read<StudentCubit>().loadStudents();
+    context.read<StudentCubit>().loadStudents(isteacher: widget.isteacher);
   }
 
   @override
@@ -27,7 +27,9 @@ class _StudentsPageState extends State<StudentsPage> {
     return Scaffold(
       appBar: StudTeachAppBar(
         context: context,
-        title: AppPagesNames.studentsList,
+        title: !widget.isteacher
+            ? AppPagesNames.studentsList
+            : AppPagesNames.teachersList,
       ),
       body: Container(color: AppColors.background, child: _buildbloc()),
     );
@@ -39,7 +41,10 @@ class _StudentsPageState extends State<StudentsPage> {
         if (state is StudentLoading) {
           return CircularProgressIndicator();
         } else if (state is StudentLoaded) {
-          return MyList(students: state.students);
+          return MyList(
+            students: state.students,
+            isteacher: widget.isteacher,
+          );
         } else if (state is StudentError) {
           return Text(state.message);
         } else {
@@ -47,24 +52,6 @@ class _StudentsPageState extends State<StudentsPage> {
             color: Colors.red,
           );
         }
-      },
-    );
-  }
-}
-
-class MyList extends StatelessWidget {
-  final List<Student> students;
-
-  const MyList({super.key, required this.students});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: students.length,
-      itemBuilder: (context, index) {
-        return UserInfoCard(
-          student: students[index],
-        );
       },
     );
   }

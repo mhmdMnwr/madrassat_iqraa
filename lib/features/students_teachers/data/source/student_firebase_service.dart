@@ -15,7 +15,7 @@ class StudentRemoteDataSource {
           .toList();
     } catch (e) {
       // Handle any errors that occur during the fetch
-      print('Error fetching students: $e');
+
       return [];
     }
   }
@@ -27,15 +27,17 @@ class StudentRemoteDataSource {
     return Student.fromJson(querySnapshot.data()!);
   }
 
-  //! Get student by name
-  Future<List<Student>> getStudentsByNamePrefix(String namePrefix) async {
+  //! Get students by name
+
+  Future<List<Student>> getStudentsByNamePrefix(String namePrefix,
+      {bool isteacher = false}) async {
     final querySnapshot = await firestore
         .collection('students')
         .orderBy('name')
-        .startAt([namePrefix]).get();
+        .startAt([namePrefix]).endAt([namePrefix + '\uf8ff']).get();
 
     return querySnapshot.docs
-        .map((doc) => Student.fromJson(doc.data()))
+        .map((doc) => Student.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
   }
 

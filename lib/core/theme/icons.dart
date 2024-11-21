@@ -11,5 +11,6 @@ class AppIcons {
   static const String homepage4 = '${_basePath}homepage4.png';
   static const String homepage5 = '${_basePath}homepage5.png';
   static const String logo = '${_basePath}logo.png';
+  static const String income = '${_basePath}incomeGreen';
   // Add more icons as needed
 }

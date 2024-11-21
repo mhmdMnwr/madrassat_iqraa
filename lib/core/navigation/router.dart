@@ -6,8 +6,8 @@ import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/home_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/login_page.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
-import 'package:madrassat_iqraa/features/students_teachers/ui/pages/students_page.dart';
-import 'package:madrassat_iqraa/features/students_teachers/ui/pages/teachers_page.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/pages/search_page.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/pages/stud&teach_page.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/pages/expenses_page.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/pages/income_page.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/pages/transaction_page.dart';
@@ -28,14 +28,37 @@ final GoRouter router = GoRouter(
               child: HomePage(),
             )),
     GoRoute(
+        path: '/searchTeatcher',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<StudentCubit>(),
+              child: SearchPage(
+                isteacher: true,
+              ),
+            )),
+    GoRoute(
+        path: '/searchStudent',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<StudentCubit>(),
+              child: SearchPage(
+                isteacher: false,
+              ),
+            )),
+    GoRoute(
         path: '/studentsList',
         builder: (context, state) => BlocProvider(
               create: (context) => getIt<StudentCubit>(),
-              child: StudentsPage(),
+              child: StudentsTeachersPage(
+                isteacher: false,
+              ),
             )),
     GoRoute(
         path: '/teachersList',
-        builder: (context, state) => const TeachersPage()),
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<StudentCubit>(),
+              child: StudentsTeachersPage(
+                isteacher: true,
+              ),
+            )),
     GoRoute(
         path: '/expenses', builder: (context, state) => const ExpensesPage()),
     GoRoute(path: '/income', builder: (context, state) => const IncomePage()),

@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
       body: Stack(
         children: [
           Container(color: AppColors.background),
-          curvedAppBar(),
+          curvedAppBar(269),
           logo(),
           HiText(),
           adminCounts(),
