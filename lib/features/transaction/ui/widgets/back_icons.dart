@@ -4,14 +4,17 @@ import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/core/theme/icons.dart';
 
-Widget backIcons({required context}) {
+Widget backIcons({
+  required context,
+  required bool isIncome,
+}) {
   return Padding(
     padding: EdgeInsets.only(top: 20.h, right: 15.w),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(
-          AppPagesNames.incomes,
+          isIncome ? AppPagesNames.incomes : AppPagesNames.expenses,
           style: AppTextStyle.titles,
           textDirection: TextDirection.rtl,
         ),

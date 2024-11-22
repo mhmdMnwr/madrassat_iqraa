@@ -11,6 +11,11 @@ class AppIcons {
   static const String homepage4 = '${_basePath}homepage4.png';
   static const String homepage5 = '${_basePath}homepage5.png';
   static const String logo = '${_basePath}logo.png';
-  static const String income = '${_basePath}incomeGreen';
+  static const String income = '${_basePath}incomeGreen.png';
+  static const String expense = '${_basePath}expenseRed.png';
+  static const String minusmoney = '${_basePath}minusmoney.png';
+  static const String addmoney = '${_basePath}addmoney.png';
+  static const String clock = '${_basePath}clock.png';
+  static const String calendar = '${_basePath}calendar.png';
   // Add more icons as needed
 }
