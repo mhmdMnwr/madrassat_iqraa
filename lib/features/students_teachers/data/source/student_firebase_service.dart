@@ -43,14 +43,20 @@ class StudentRemoteDataSource {
 
   //! Get students by isTeacher
   Future<List<Student>> getStudentsByIsTeacher({bool isTeacher = true}) async {
-    final querySnapshot = await firestore
-        .collection('students')
-        .where('isTeacher', isEqualTo: isTeacher)
-        .get();
+    try {
+      final querySnapshot = await firestore
+          .collection('students')
+          .where('isTeacher', isEqualTo: isTeacher)
+          .get();
 
-    return querySnapshot.docs
-        .map((doc) => Student.fromJson(doc.data()))
-        .toList();
+      return querySnapshot.docs
+          .map((doc) => Student.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      // Handle any errors that occur during the fetch
+      return [];
+    }
   }
 
   Future<List<Student>> getpayedStudents(

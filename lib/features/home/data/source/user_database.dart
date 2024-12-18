@@ -25,4 +25,18 @@ class UserRemoteDataSource {
   Future<void> createUser(User user) async {
     await firestore.collection('users').add(user.toJson());
   }
+
+  // Fetch user by name from Firebase
+  Future<User?> getUserByName(String name) async {
+    final querySnapshot = await firestore
+        .collection('users')
+        .where('userName', isEqualTo: name)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return User.fromJson(querySnapshot.docs.first.data());
+    } else {
+      return null;
+    }
+  }
 }

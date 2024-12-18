@@ -8,6 +8,8 @@ import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/logo.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/body/categories.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -28,7 +28,7 @@ class Student extends Equatable {
     String? id,
     required this.name,
     this.money = 0,
-    required this.birthDate,
+    this.birthDate = "1/2/3",
     required this.sex,
     required this.isTeacher,
     required this.createdAt,
@@ -65,6 +65,7 @@ class Student extends Equatable {
     return {
       'name': name,
       'money': money,
+      'birthDate': birthDate,
       'id': id,
       'registrationDate': birthDate,
       'sex': sex,

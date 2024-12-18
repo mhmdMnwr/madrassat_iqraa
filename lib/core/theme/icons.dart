@@ -17,5 +17,7 @@ class AppIcons {
   static const String addmoney = '${_basePath}addmoney.png';
   static const String clock = '${_basePath}clock.png';
   static const String calendar = '${_basePath}calendar.png';
+  static const String username = '${_basePath}username.png';
+  static const String password = '${_basePath}password.png';
   // Add more icons as needed
 }

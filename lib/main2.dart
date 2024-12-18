@@ -1,54 +1,149 @@
-import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
-import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
-import 'package:madrassat_iqraa/features/students_teachers/data/source/student_firebase_service.dart';
-import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
-import 'package:madrassat_iqraa/features/transaction/data/source/transaction_firebase.dart';
-import 'package:madrassat_iqraa/injection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/theme/colors.dart';
 
-void main() async {
-  // Create a bunch of students
-  for (int i = 0; i < 10; i++) {
-    final student = Student(
-      name: 'Student $i',
-      id: 'student_$i',
-      birthDate: '2000-01-01',
-      sex: 'Male',
-      isTeacher: false,
-      payed: true,
-      createdAt: DateTime.now(),
-    );
-    await getIt<StudentRemoteDataSource>().createStudent(student);
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _userNameController = TextEditingController();
+
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
-  // Create a bunch of teachers
-  for (int i = 0; i < 5; i++) {
-    final teacher = Student(
-      name: 'Teacher $i',
-      id: 'teacher_$i',
-      birthDate: '1980-01-01',
-      sex: 'Female',
-      isTeacher: true,
-      payed: true,
-      createdAt: DateTime.now(),
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const LoginScreen(),
     );
-    await getIt<StudentRemoteDataSource>().createStudent(teacher);
   }
+}
 
-  // Create a bunch of transactions
-  for (int i = 0; i < 20; i++) {
-    final user = User(
-      id: 'user_$i',
-      userName: 'User $i',
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.shadowBlue, // Dark blue background
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Top logo
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              height: 50.h,
+              decoration: const BoxDecoration(
+                color: Colors.yellow, // Yellow circle
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.school, // School cap icon
+                  color: Color(0xFF001A4D), // Dark blue icon
+                  size: 60,
+                ),
+              ),
+            ),
+            // Login container
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey[200], // Light grey container
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                children: [
+                  // Title
+                  const Text(
+                    'تسجيل الدخول',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Username field
+                  TextField(
+                    textDirection: TextDirection.rtl,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'اسم المستخدم',
+                      hintTextDirection: TextDirection.rtl,
+                      prefixIcon: const Icon(Icons.edit),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  // Password field
+                  TextField(
+                    textDirection: TextDirection.rtl,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'كلمة المرور',
+                      hintTextDirection: TextDirection.rtl,
+                      prefixIcon: const Icon(Icons.lock),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Login button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color(0xFF001A4D), // Dark blue button
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        // Handle login action
+                      },
+                      child: const Text(
+                        'الدخول',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
-    final transaction = Transactions(
-      type: i % 2 == 0,
-      user: user,
-      amount: 100 * (i + 1),
-      description: 'Transaction $i',
-      createdAt: DateTime.now(),
-    );
-    await getIt<TransactionsRemoteDataSource>().createTransaction(transaction);
   }
-
-  print('Data created successfully ******************************');
 }

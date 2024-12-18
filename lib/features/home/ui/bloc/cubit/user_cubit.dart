@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:madrassat_iqraa/core/error/error_message.dart';
 import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 
@@ -13,6 +14,18 @@ class UserCubit extends Cubit<UserState> {
   Future<void> getUserById() async {
     emit(UserLoading());
     final result = await userRepository.getUserById();
+    result.fold(
+      (error) => emit(UserError(error)),
+      (user) => user != null
+          ? emit(UserLoaded(user))
+          : emit(UserError('User not found')),
+    );
+  }
+
+  // getUserfromFirebase
+  Future<void> getUserfromFirebase(String userId) async {
+    emit(UserLoading());
+    final result = await userRepository.getUserfromFirebase(userId);
     result.fold(
       (error) => emit(UserError(error)),
       (user) => user != null
@@ -39,6 +52,17 @@ class UserCubit extends Cubit<UserState> {
       (error) => emit(UserError(error)),
       (_) => emit(
           UserCreated()), // Emit a separate state indicating user creation success
+    );
+  }
+
+  // fetch user by name
+  Future<void> getUserByName(String name) async {
+    emit(UserLoading());
+    final result = await userRepository.fetchUserByName(name);
+    result.fold(
+      (error) => emit(UserError(error)),
+      (user) =>
+          user != null ? emit(UserLoaded(user)) : emit(UserError(itemNotFound)),
     );
   }
 

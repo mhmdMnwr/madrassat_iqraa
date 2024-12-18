@@ -6,7 +6,7 @@ import 'package:madrassat_iqraa/features/home/ui/pages/home_page.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/search_page.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/stud&teach_page.dart';
-import 'package:madrassat_iqraa/features/transaction/ui/pages/expenses_page.dart';
+import 'package:madrassat_iqraa/features/transaction/ui/bloc/cubit/transactions_cubit.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/pages/income_expense_page.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/pages/transaction_page.dart';
 import 'package:madrassat_iqraa/injection.dart';
@@ -59,13 +59,19 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: '/expenses',
-        builder: (context, state) => const IncomeExpensePage(
-              isIncome: false,
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<TransactionsCubit>(),
+              child: const IncomeExpensePage(
+                isIncome: false,
+              ),
             )),
     GoRoute(
         path: '/income',
-        builder: (context, state) => const IncomeExpensePage(
-              isIncome: true,
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<TransactionsCubit>(),
+              child: const IncomeExpensePage(
+                isIncome: true,
+              ),
             )),
     GoRoute(
         path: '/transaction',

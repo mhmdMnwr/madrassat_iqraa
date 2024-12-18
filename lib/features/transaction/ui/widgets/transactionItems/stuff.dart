@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:madrassat_iqraa/core/String.dart';
+import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/core/theme/icons.dart';
+import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
 
 BoxDecoration border() {
   return BoxDecoration(
@@ -23,7 +24,7 @@ BoxDecoration border() {
   );
 }
 
-Widget infoColumn() {
+Widget infoColumn({required Transactions transaction}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 30.w,
@@ -44,11 +45,17 @@ Widget infoColumn() {
                     fontWeight: FontWeight.w500,
                     color: AppColors.skyBlue,
                     fontSize: 18.sp)),
-            timeRow(time: '12:30', icon: AppIcons.clock),
+            timeRow(
+                time:
+                    '${transaction.createdAt.hour}:${transaction.createdAt.minute}',
+                icon: AppIcons.clock),
             SizedBox(
               height: 5.h,
             ),
-            timeRow(time: '12/05/2024', icon: AppIcons.calendar),
+            timeRow(
+                time:
+                    '${transaction.createdAt.day}/${transaction.createdAt.month}/${transaction.createdAt.year}',
+                icon: AppIcons.calendar),
           ],
         ),
       ),
@@ -73,14 +80,14 @@ Widget timeRow({required String time, required String icon}) {
   ]);
 }
 
-Widget moneyRow({required bool isIncome}) {
+Widget moneyRow({required bool isIncome, required Transactions transaction}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 25.w,
       top: 50.h,
     ),
     child: Row(children: [
-      Text("50000 دج",
+      Text("${transaction.amount} دج",
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,
           style: TextStyle(

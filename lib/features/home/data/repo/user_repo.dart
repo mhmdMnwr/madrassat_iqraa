@@ -45,6 +45,21 @@ class UserRepository {
     }
   }
 
+  //! get user by ID from firebase
+  Future<Either<String, User?>> getUserfromFirebase(String userId) async {
+    if (await _hasConnection()) {
+      try {
+        // Fetch the user details from the remote data source
+        final user = await _remoteDataSource.getUserById(userId);
+        return Right(user);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
   // Future<Either<String, String?>> getUserId() async {
   //   if (await _hasConnection()) {
   //     // Retrieve the cached user ID from UserLocalDataSource
@@ -113,5 +128,24 @@ class UserRepository {
   //! Check if a user ID exists in UserLocalDataSource
   Future<bool> hasUserId() async {
     return await _localDataSource.hasUserId();
+  }
+
+  //!fetch user by name
+  Future<Either<String, User?>> fetchUserByName(String name) async {
+    if (await _hasConnection()) {
+      try {
+        // Fetch the user details from the remote data source
+        final user = await _remoteDataSource.getUserByName(name);
+        if (user != null) {
+          return Right(user);
+        } else {
+          return Left(itemNotFound);
+        }
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
   }
 }

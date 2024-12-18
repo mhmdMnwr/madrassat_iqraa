@@ -5,10 +5,14 @@ import 'package:madrassat_iqraa/core/helper/id_generator.dart';
 class User extends Equatable {
   final String userName;
   final String id;
+  bool accepted;
+  String password;
 
   User({
     String? id,
     required this.userName,
+    required this.password,
+    required this.accepted,
   }) : id = id ?? IdGenerator.generateId();
 
   @override
@@ -18,6 +22,8 @@ class User extends Equatable {
     return User(
       userName: json['userName'] as String,
       id: json['id'] as String,
+      password: json['password'] as String,
+      accepted: json['accepted'] as bool,
     );
   }
 
@@ -26,6 +32,8 @@ class User extends Equatable {
     return {
       'id': id,
       'userName': userName,
+      "accepted": accepted,
+      "password": password,
     };
   }
 }
