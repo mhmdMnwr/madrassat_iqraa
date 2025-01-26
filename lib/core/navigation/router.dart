@@ -2,7 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:madrassat_iqraa/core/navigation/main_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
+import 'package:madrassat_iqraa/features/home/ui/pages/admin.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/home_page.dart';
+import 'package:madrassat_iqraa/features/home/ui/pages/splash_screen.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/search_page.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/stud&teach_page.dart';
@@ -15,6 +17,12 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
         path: '/',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<UserCubit>(),
+              child: SplashScreen(),
+            )),
+    GoRoute(
+        path: '/Main',
         builder: (context, state) => BlocProvider(
               create: (context) => getIt<UserCubit>(),
               child: MainPage(),
@@ -76,5 +84,6 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/transaction',
         builder: (context, state) => const TransactionPage()),
+    GoRoute(path: '/admin', builder: (context, state) => const Admin()),
   ],
 );

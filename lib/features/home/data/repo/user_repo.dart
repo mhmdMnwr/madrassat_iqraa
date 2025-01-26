@@ -100,7 +100,7 @@ class UserRepository {
         await _remoteDataSource.createUser(user);
 
         // Save the user ID in UserLocalDataSource
-        await saveUserId(user.id);
+
         return const Right(null);
       } catch (e) {
         return Left(ordinaryError);

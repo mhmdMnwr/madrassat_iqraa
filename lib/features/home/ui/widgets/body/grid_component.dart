@@ -69,6 +69,7 @@ List<String> homePageImages = [
   AppIcons.homepage3,
   AppIcons.homepage4,
   AppIcons.homepage5,
+  AppIcons.homepage6,
 ];
 List<String> homePageTitles = [
   AppPagesNames.studentsList,
@@ -76,4 +77,5 @@ List<String> homePageTitles = [
   AppPagesNames.expenses,
   AppPagesNames.incomes,
   AppPagesNames.transactions,
+  AppPagesNames.admin,
 ];

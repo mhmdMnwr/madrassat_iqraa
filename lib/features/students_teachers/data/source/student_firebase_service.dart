@@ -53,7 +53,6 @@ class StudentRemoteDataSource {
           .map((doc) => Student.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print(e.toString());
       // Handle any errors that occur during the fetch
       return [];
     }

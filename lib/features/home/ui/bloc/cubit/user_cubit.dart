@@ -47,12 +47,17 @@ class UserCubit extends Cubit<UserState> {
   // Create user
   Future<void> createUser(User user) async {
     emit(UserLoading());
-    final result = await userRepository.createUser(user);
-    result.fold(
-      (error) => emit(UserError(error)),
-      (_) => emit(
-          UserCreated()), // Emit a separate state indicating user creation success
-    );
+    final userExists = await isUserExist(user.userName);
+    if (userExists) {
+      emit(UserError('Username already exists'));
+    } else {
+      final result = await userRepository.createUser(user);
+      result.fold(
+        (error) => emit(UserError(error)),
+        (_) => emit(
+            UserCreated()), // Emit a separate state indicating user creation success
+      );
+    }
   }
 
   // fetch user by name
@@ -63,6 +68,18 @@ class UserCubit extends Cubit<UserState> {
       (error) => emit(UserError(error)),
       (user) =>
           user != null ? emit(UserLoaded(user)) : emit(UserError(itemNotFound)),
+    );
+  }
+
+  // Check if username exists
+  Future<bool> isUserExist(String username) async {
+    emit(UserLoading());
+    final result = await userRepository.fetchUserByName(username);
+    return result.fold(
+      (error) {
+        return false;
+      },
+      (user) => user != null,
     );
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/body/grid_component.dart';
 
-Widget categories() {
+Widget categories({required bool admin}) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 30.w),
     child: LayoutBuilder(
@@ -16,7 +16,7 @@ Widget categories() {
             mainAxisSpacing: 22.w, // Spacing between rows
             childAspectRatio: 1.11.sp, // Adjust the aspect ratio as needed
           ),
-          itemCount: 5,
+          itemCount: admin ? 6 : 5,
           itemBuilder: (context, index) {
             return gridRouter(context: context, index: index);
           },

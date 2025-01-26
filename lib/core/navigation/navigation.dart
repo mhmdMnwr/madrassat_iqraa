@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 void navigateToPage(BuildContext context, String pageName) {
   switch (pageName) {
+    case 'main':
+      context.push('/Main');
     case 'home':
       context.push('/home');
       break;
@@ -26,6 +28,8 @@ void navigateToPage(BuildContext context, String pageName) {
       break;
     case 'transaction':
       context.push('/transaction');
+    case 'admin':
+      context.push('/admin');
       break;
     default:
       context.push('/');
@@ -38,4 +42,6 @@ const List<String> pageNames = [
   'expenses',
   'income',
   'transaction',
+  'admin',
+  'main'
 ];

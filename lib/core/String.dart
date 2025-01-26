@@ -1,5 +1,7 @@
 class AppStrings {
   static const String fontfam = "Amiri";
+  static const String adminName = "mnwram";
+  static const String appName = "مؤسسة إقرأ التعليمية";
 }
 
 class AppPagesNames {
@@ -10,4 +12,5 @@ class AppPagesNames {
   static const String incomes = 'التبرعات الشهرية';
   static const String transactions = 'سجل المعاملات المالية';
   static const String search = 'بحث';
+  static const String admin = 'المسوؤل';
 }

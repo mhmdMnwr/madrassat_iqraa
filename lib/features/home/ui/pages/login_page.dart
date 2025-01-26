@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:madrassat_iqraa/core/error/error_message.dart';
 import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/login/form.dart';
@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isCreatingUser = false;
 
   @override
   void dispose() {
@@ -29,82 +30,18 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  dynamic _userListener() {
-    return BlocListener<UserCubit, UserState>(
-      listener: (context, state) {
-        if (state is UserLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('جاري المعالجة...')),
-          );
-        } else if (state is UserCreated) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('تم إنشاء المستخدم بنجاح')),
-          );
-          _navigateToHomePage();
-        } else if (state is UserError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('خطأ: ${state.message}')),
-          );
-        }
-      },
-      child: Container(),
-    );
-  }
-
-  Future<void> _saveUser() async {
+  Future<void> _saveUser({required bool signup}) async {
     if (_formKey.currentState!.validate()) {
       final userName = _userNameController.text;
       final password = _passwordController.text;
       final newUser =
           User(userName: userName, password: password, accepted: false);
-      context.read<UserCubit>().createUser(newUser);
-      _userListener();
-      // BlocListener<UserCubit, UserState>(
-      //   listener: (context, state) {
-      //     if (state is UserLoaded) {
-      //       if (state.user.password == password) {
-      //         context.read<UserCubit>().saveUserId(state.user.id);
-      //         _navigateToHomePage();
-      //       } else {
-      //         ScaffoldMessenger.of(context).showSnackBar(
-      //           SnackBar(
-      //             content: Text(invalidPassword),
-      //             backgroundColor: AppColors.vibrantOrange,
-      //           ),
-      //         );
-      //       }
-      //     } else if (state is UserError) {
-      //       if (state.message == itemNotFound) {
-      //         showDialog(
-      //           context: context,
-      //           builder: (BuildContext context) {
-      //             return AlertDialog(
-      //               title: Text('المستخدم غير موجود'),
-      //               content: Text('هل تريد التسجيل في التطبيق؟'),
-      //               actions: [
-      //                 TextButton(
-      //                   onPressed: () {
-      //                     Navigator.of(context).pop();
-      //                   },
-      //                   child: Text('إلغاء'),
-      //                 ),
-      //                 TextButton(
-      //                   onPressed: () {
-      //                     Navigator.of(context).pop();
-      //                     context.read<UserCubit>().createUser(newUser);
-      //                   },
-      //                   child: Text('تسجيل'),
-      //                 ),
-      //               ],
-      //             );
-      //           },
-      //         );
-      //       }
-      //     }
-      //   },
-      //   child: Container(),
-      // );
+
+      if (signup) {
+        context.read<UserCubit>().createUser(newUser);
+      } else {
+        await context.read<UserCubit>().getUserByName(userName);
+      }
     }
   }
 
@@ -115,11 +52,51 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(children: [
-        Container(color: AppColors.shadowBlue),
-        Logo(),
-        form(),
-      ]),
+      body: BlocListener<UserCubit, UserState>(
+        listener: (context, state) {
+          if (state is UserLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('جاري المعالجة...')),
+            );
+          } else if (state is UserCreated) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('تم إنشاء المستخدم بنجاح')),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('تم تسجيل طلبك')),
+            );
+            // _navigateToHomePage();
+          } else if (state is UserLoaded) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            if (state.user.password == _passwordController.text) {
+              if (state.user.accepted) {
+                context.read<UserCubit>().saveUserId(state.user.id);
+                _navigateToHomePage();
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('لم يتم قبول طلبك بعد')),
+                );
+              }
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('اسم المستخدم أو كلمة المرور غير صحيحة')),
+              );
+            }
+            // _navigateToHomePage();
+          } else if (state is UserError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('خطأ: ${state.message}')),
+            );
+          }
+        },
+        child: Stack(children: [
+          Container(color: AppColors.shadowBlue),
+          Logo(),
+          form(),
+        ]),
+      ),
     );
   }
 
@@ -168,10 +145,25 @@ class _LoginPageState extends State<LoginPage> {
                 height: 35.h,
               ),
               passwordTFF(controller: _passwordController),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('إنشاء مستخدم جديد؟', style: AppTextStyle.subTitles),
+                  Checkbox(
+                    value: _isCreatingUser,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isCreatingUser = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
               SizedBox(
                 height: 50.h,
               ),
-              registerButton(saveUser: _saveUser),
+              registerButton(
+                  saveUser: () => _saveUser(signup: _isCreatingUser)),
             ],
           ),
         ),
