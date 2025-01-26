@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:madrassat_iqraa/core/admin/admin_state.dart';
 import 'package:madrassat_iqraa/core/helper/id_generator.dart';
 
 class Student extends Equatable {
@@ -9,6 +8,7 @@ class Student extends Equatable {
   final String birthDate;
   final String sex;
   final bool isTeacher;
+  final String payDay;
   int get age {
     final birthDateParsed = DateTime.parse(birthDate);
     final today = DateTime.now();
@@ -25,21 +25,17 @@ class Student extends Equatable {
   final DateTime createdAt;
 
   Student({
+    required this.payDay,
     String? id,
     required this.name,
     this.money = 0,
-    this.birthDate = "1/2/3",
+    required this.birthDate,
     required this.sex,
     required this.isTeacher,
-    required this.createdAt,
+    DateTime? createdAt,
     required this.payed,
-  }) : id = id ?? IdGenerator.generateId() {
-    if (isTeacher) {
-      AdminStatsService().incrementTeacherCount();
-    } else {
-      AdminStatsService().incrementStudentCount();
-    }
-  }
+  })  : id = id ?? IdGenerator.generateId(),
+        createdAt = createdAt ?? DateTime.now();
 
   @override
   List<Object?> get props =>
@@ -52,6 +48,7 @@ class Student extends Equatable {
       money: json['money'] as int,
       id: json['id'] as String,
       birthDate: json['birthDate'] as String,
+      payDay: json['payDay'] as String,
       sex: json['sex'] as String,
       isTeacher: json['isTeacher'] as bool,
       payed: json['payed'] as bool,
@@ -66,6 +63,7 @@ class Student extends Equatable {
       'name': name,
       'money': money,
       'birthDate': birthDate,
+      "payDay": payDay,
       'id': id,
       'registrationDate': birthDate,
       'sex': sex,

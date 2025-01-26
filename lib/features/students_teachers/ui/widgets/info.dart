@@ -65,7 +65,7 @@ class UserInfoCard extends StatelessWidget {
                   Text(
                     !isteacher
                         ? "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}"
-                        : "تاريخ الانضمام: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}",
+                        : "تاريخ الانضمام: ${student.payDay.substring(0, 10).replaceAll('-', '/')}",
                     style: AppTextStyle.text,
                     textAlign: TextAlign.right,
                   ),

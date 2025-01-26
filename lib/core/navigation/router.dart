@@ -4,6 +4,7 @@ import 'package:madrassat_iqraa/core/navigation/main_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/admin.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/home_page.dart';
+import 'package:madrassat_iqraa/features/home/ui/pages/login_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/splash_screen.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/search_page.dart';
@@ -26,6 +27,12 @@ final GoRouter router = GoRouter(
         builder: (context, state) => BlocProvider(
               create: (context) => getIt<UserCubit>(),
               child: MainPage(),
+            )),
+    GoRoute(
+        path: '/LogIn',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<UserCubit>(),
+              child: LoginPage(),
             )),
     GoRoute(
         path: '/home',
@@ -84,6 +91,11 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/transaction',
         builder: (context, state) => const TransactionPage()),
-    GoRoute(path: '/admin', builder: (context, state) => const Admin()),
+    GoRoute(
+        path: '/admin',
+        builder: (context, state) => BlocProvider(
+              create: (context) => getIt<UserCubit>(),
+              child: const Admin(),
+            )),
   ],
 );

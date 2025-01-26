@@ -23,6 +23,21 @@ class UserRepository {
     return await _connectionChecker.hasConnection;
   }
 
+  //! logout
+  Future<Either<String, void>> logout() async {
+    if (await _hasConnection()) {
+      try {
+        // Save the user ID to UserLocalDataSource
+        await _localDataSource.deleteUserIdFile();
+        return const Right(null);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
   //! Get user by ID saved in local cache
   Future<Either<String, User?>> getUserById() async {
     if (await _hasConnection()) {
@@ -141,6 +156,52 @@ class UserRepository {
         } else {
           return Left(itemNotFound);
         }
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
+  //! get accepted users
+  Future<Either<String, List<User>>> getAcceptedUsers() async {
+    if (await _hasConnection()) {
+      try {
+        // Fetch the users from the remote data source
+        final users = await _remoteDataSource.getAcceptedUsers();
+        return Right(users);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
+  //! Get users that are not refused and not accepted
+  Future<Either<String, List<User>>> getUsersNotRefusedOrAccepted() async {
+    if (await _hasConnection()) {
+      try {
+        // Fetch the users from the remote data source
+        final users =
+            await _remoteDataSource.getUsersNotRefusedAndNotAccepted();
+        return Right(users);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
+  //! update user
+  Future<Either<String, void>> updateUser(String id, User user) async {
+    if (await _hasConnection()) {
+      try {
+        // Fetch the users from the remote data source
+        final users = await _remoteDataSource.updateUser(id, user);
+        return Right(users);
       } catch (e) {
         return Left(ordinaryError);
       }

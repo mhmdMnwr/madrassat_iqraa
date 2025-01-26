@@ -1,6 +1,5 @@
 class AppStrings {
   static const String fontfam = "Amiri";
-  static const String adminName = "mnwram";
   static const String appName = "مؤسسة إقرأ التعليمية";
 }
 

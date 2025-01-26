@@ -8,7 +8,7 @@ import 'package:madrassat_iqraa/core/theme/colors.dart';
 class StudTeachAppBar extends AppBar {
   StudTeachAppBar({
     super.key,
-    bool search = false,
+    bool search = true,
     bool isteacher = false,
     required String title,
     required context,
@@ -27,7 +27,7 @@ class StudTeachAppBar extends AppBar {
               ),
             ],
           ),
-          leading: !search
+          leading: search
               ? IconButton(
                   icon: Image.asset(AppIcons.search),
                   onPressed: () {

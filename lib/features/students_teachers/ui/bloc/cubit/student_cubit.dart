@@ -37,17 +37,18 @@ class StudentCubit extends Cubit<StudentState> {
   }
 
   // Add a new student
-  Future<void> addStudent(Student student, {required bool isteacher}) async {
+  Future<void> addStudent(Student student, {required bool isTeacher}) async {
+    emit(StudentLoading());
     final result = await _repository.createStudent(student);
     result.fold(
       (failure) => emit(StudentError(message: failure)),
       (_) => emit(StudentOperationSuccess()),
     );
-    await loadStudents(isteacher: isteacher); // Refresh after adding
+    await loadStudents(isteacher: isTeacher); // Refresh after adding
   }
 
   // Update an existing student
-  Future<void> updateStudent(int id, Student student,
+  Future<void> updateStudent(String id, Student student,
       {required bool isteacher}) async {
     final result = await _repository.updateStudent(id, student);
     result.fold(

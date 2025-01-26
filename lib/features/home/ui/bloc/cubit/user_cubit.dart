@@ -34,6 +34,16 @@ class UserCubit extends Cubit<UserState> {
     );
   }
 
+  //logout
+  Future<void> logOut() async {
+    emit(UserLoading());
+    final result = await userRepository.logout();
+    result.fold(
+      (error) => emit(UserError(error)),
+      (_) => emit(LogOut()),
+    );
+  }
+
   // Save user ID
   Future<void> saveUserId(String userId) async {
     emit(UserLoading());
@@ -71,6 +81,28 @@ class UserCubit extends Cubit<UserState> {
     );
   }
 
+  // get the users that are not accepted yet and also not refused so the admin choose either to accept or refuse
+  Future<void> getAdminUsers() async {
+    emit(UserLoading());
+
+    // Fetch both lists independently
+    final result = await userRepository.getUsersNotRefusedOrAccepted();
+    final acceptedUsers = await userRepository.getAcceptedUsers();
+
+    result.fold(
+      (error) => emit(UserError(error)),
+      (users) async {
+        acceptedUsers.fold(
+          (error) => emit(UserError(error)),
+          (accepted) {
+            // Emit the state with both lists once both are fetched
+            emit(AcceptedUsersLoaded(users, accepted));
+          },
+        );
+      },
+    );
+  }
+
   // Check if username exists
   Future<bool> isUserExist(String username) async {
     emit(UserLoading());
@@ -80,6 +112,45 @@ class UserCubit extends Cubit<UserState> {
         return false;
       },
       (user) => user != null,
+    );
+  }
+
+  //update user
+
+  Future<void> updateUser({required String id, required User user}) async {
+    emit(UpdateLoading());
+
+    // Step 1: Update the user
+    final result = await userRepository.updateUser(id, user);
+
+    result.fold(
+      (error) {
+        emit(UserError(error));
+      },
+      (_) async {
+        // Step 2: Fetch both lists simultaneously
+        final updatedUsersResult =
+            await userRepository.getUsersNotRefusedOrAccepted();
+        final acceptedUsersResult = await userRepository.getAcceptedUsers();
+
+        // Step 3: Handle each list independently
+        updatedUsersResult.fold(
+          (error) {
+            emit(UserError(error));
+          },
+          (updatedUsers) async {
+            acceptedUsersResult.fold(
+              (error) {
+                emit(UserError(error));
+              },
+              (acceptedUsers) {
+                // Step 4: Emit both lists once ready
+                emit(AcceptedUsersLoaded(updatedUsers, acceptedUsers));
+              },
+            );
+          },
+        );
+      },
     );
   }
 

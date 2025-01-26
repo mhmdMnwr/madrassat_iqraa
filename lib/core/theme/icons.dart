@@ -20,5 +20,12 @@ class AppIcons {
   static const String calendar = '${_basePath}calendar.png';
   static const String username = '${_basePath}username.png';
   static const String password = '${_basePath}password.png';
+  static const String adminaccept = '${_basePath}adminacc.png';
+  static const String adminreject = '${_basePath}adminrej.png';
+  static const String details = '${_basePath}details.png';
+  static const String pay = '${_basePath}pay.png';
+  static const String delete = '${_basePath}delete.png';
+  static const String update = '${_basePath}update.png';
+
   // Add more icons as needed
 }

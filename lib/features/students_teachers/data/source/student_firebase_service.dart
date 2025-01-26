@@ -78,7 +78,7 @@ class StudentRemoteDataSource {
   }
 
   //! Update an existing student
-  Future<void> updateStudent(int id, Student student) async {
+  Future<void> updateStudent(String id, Student student) async {
     final querySnapshot = await firestore
         .collection('students')
         .where('id', isEqualTo: id)

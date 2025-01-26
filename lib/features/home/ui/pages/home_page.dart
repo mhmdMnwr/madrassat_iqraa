@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:madrassat_iqraa/core/string.dart';
+import 'package:madrassat_iqraa/core/admin/strings.dart';
+import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
+import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/admin_counts.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/curved_appbar.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/hi_text.dart';
@@ -11,7 +14,6 @@ import 'package:madrassat_iqraa/features/home/ui/widgets/body/categories.dart';
 import 'package:madrassat_iqraa/injection.dart';
 
 class HomePage extends StatefulWidget {
-  bool admin = false;
   final repository = getIt<UserRepository>();
   HomePage({
     super.key,
@@ -22,6 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool admin = false;
   @override
   void initState() {
     super.initState();
@@ -31,7 +34,8 @@ class _HomePageState extends State<HomePage> {
         (user) {
           if (user != null) {
             setState(() {
-              widget.admin = (user.userName == AppStrings.adminName);
+              admin = (user.userName == AdminString.name &&
+                  user.password == AdminString.password);
             });
           }
         },
@@ -41,23 +45,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(color: AppColors.background),
-          curvedAppBar(269),
-          logo(),
-          HiText(),
-          adminCounts(),
-          Column(
-            children: [
-              SizedBox(
-                height: 330.h,
-              ),
-              Expanded(child: categories(admin: widget.admin)),
-            ],
-          ),
-        ],
+    return BlocListener<UserCubit, UserState>(
+      listener: (context, state) {
+        if (state is LogOut) {
+          navigateToPage(context, 'LogIn');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Logged out successfully'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(color: AppColors.background),
+            curvedAppBar(269),
+            const Logo(),
+            HiText(),
+            adminCounts(),
+            Column(
+              children: [
+                SizedBox(height: 350.h),
+                Expanded(child: categories(admin: admin)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

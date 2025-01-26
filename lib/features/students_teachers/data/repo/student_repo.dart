@@ -118,7 +118,7 @@ class StudentRepository {
   }
 
   // Update an existing student with error handling
-  Future<Either<String, void>> updateStudent(int id, Student student) async {
+  Future<Either<String, void>> updateStudent(String id, Student student) async {
     if (await _hasConnection()) {
       try {
         await _dataSource.updateStudent(id, student);

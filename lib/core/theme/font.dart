@@ -15,6 +15,11 @@ class AppTextStyle {
       fontWeight: FontWeight.w400,
       color: Colors.white,
       fontSize: 28.sp);
+  static TextStyle mains = TextStyle(
+      fontFamily: AppStrings.fontfam,
+      fontWeight: FontWeight.w600,
+      color: AppColors.midnightBlue,
+      fontSize: 35.sp);
   static TextStyle subTitles = TextStyle(
       fontFamily: AppStrings.fontfam,
       fontWeight: FontWeight.w700,
