@@ -26,6 +26,7 @@ class AppIcons {
   static const String pay = '${_basePath}pay.png';
   static const String delete = '${_basePath}delete.png';
   static const String update = '${_basePath}update.png';
+  static const String studentDetails = '${_basePath}studentDetails.png';
 
   // Add more icons as needed
 }

@@ -6,7 +6,8 @@ import 'package:madrassat_iqraa/core/theme/icons.dart';
 
 Widget backIcons({
   required context,
-  required bool isIncome,
+  bool details = false,
+  bool isIncome = true,
 }) {
   return Padding(
     padding: EdgeInsets.only(top: 20.h, right: 15.w),
@@ -14,7 +15,11 @@ Widget backIcons({
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(
-          isIncome ? AppPagesNames.incomes : AppPagesNames.expenses,
+          details
+              ? AppPagesNames.details
+              : isIncome
+                  ? AppPagesNames.incomes
+                  : AppPagesNames.expenses,
           style: AppTextStyle.titles,
           textDirection: TextDirection.rtl,
         ),

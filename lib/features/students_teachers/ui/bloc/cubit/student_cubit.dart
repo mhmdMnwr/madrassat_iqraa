@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:madrassat_iqraa/features/students_teachers/data/model/payed_months.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/repo/student_repo.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
@@ -23,11 +24,11 @@ class StudentCubit extends Cubit<StudentState> {
   }
 
   //search student
-  Future<void> searchStudents(String name, {bool isteacher = false}) async {
+  Future<void> searchStudents(String name, {required bool isTeacher}) async {
     emit(StudentLoading());
     final result = await _repository.getStudentsByName(
       name,
-      isteacher: isteacher,
+      isTeacher: isTeacher,
     );
     result.fold(
       (failure) => emit(StudentError(message: failure)),
@@ -49,22 +50,41 @@ class StudentCubit extends Cubit<StudentState> {
 
   // Update an existing student
   Future<void> updateStudent(String id, Student student,
-      {required bool isteacher}) async {
+      {required bool isTeacher}) async {
     final result = await _repository.updateStudent(id, student);
     result.fold(
       (failure) => emit(StudentError(message: failure)),
       (_) => emit(StudentOperationSuccess()),
     );
-    await loadStudents(isteacher: isteacher); // Refresh after updating
+    await loadStudents(isteacher: isTeacher); // Refresh after updating
   }
 
   // Delete a student
-  Future<void> deleteStudent(int id, {required bool isteacher}) async {
+  Future<void> deleteStudent(String id, {required bool isTeacher}) async {
     final result = await _repository.deleteStudent(id);
     result.fold(
       (failure) => emit(StudentError(message: failure)),
       (_) => emit(StudentOperationSuccess()),
     );
-    await loadStudents(isteacher: isteacher); // Refresh after deleting
+    await loadStudents(isteacher: isTeacher); // Refresh after deleting
+  }
+
+  //create payed months
+  Future<void> createPayedMonths(PayedMonths date) async {
+    final result = await _repository.createPayedMonths(date);
+    result.fold(
+      (failure) => emit(PayedMonthError(message: failure)),
+      (_) => emit(PayedMonthSuccess()),
+    );
+  }
+
+  //get payed months
+  Future<void> getPayedMonths({required String id}) async {
+    emit(StudentLoading());
+    final result = await _repository.getPayedMonths(id: id);
+    result.fold(
+      (failure) => emit(PayedMonthError(message: failure)),
+      (dates) => emit(PayedMonthsLoaded(dates: dates)),
+    );
   }
 }

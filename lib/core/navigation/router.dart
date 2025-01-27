@@ -45,7 +45,7 @@ final GoRouter router = GoRouter(
         builder: (context, state) => BlocProvider(
               create: (context) => getIt<StudentCubit>(),
               child: SearchPage(
-                isteacher: true,
+                isTeacher: true,
               ),
             )),
     GoRoute(
@@ -53,7 +53,7 @@ final GoRouter router = GoRouter(
         builder: (context, state) => BlocProvider(
               create: (context) => getIt<StudentCubit>(),
               child: SearchPage(
-                isteacher: false,
+                isTeacher: false,
               ),
             )),
     GoRoute(

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:madrassat_iqraa/core/error/error_message.dart';
+import 'package:madrassat_iqraa/features/students_teachers/data/model/payed_months.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 
 import '../source/student_firebase_service.dart';
@@ -51,13 +52,13 @@ class StudentRepository {
   // Get student by name with error handling
   Future<Either<String, List<Student>>> getStudentsByName(
     String name, {
-    bool isteacher = false,
+    required bool isTeacher,
   }) async {
     if (await _hasConnection()) {
       try {
         final students = await _dataSource.getStudentsByNamePrefix(
           name,
-          isteacher: isteacher,
+          isTeacher: isTeacher,
         );
         return Right(students);
       } catch (e) {
@@ -132,11 +133,40 @@ class StudentRepository {
   }
 
   // Delete a student with error handling
-  Future<Either<String, void>> deleteStudent(int id) async {
+  Future<Either<String, void>> deleteStudent(String id) async {
     if (await _hasConnection()) {
       try {
         await _dataSource.deleteStudent(id);
         return const Right(null);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
+  // create payed months
+  Future<Either<String, void>> createPayedMonths(PayedMonths date) async {
+    if (await _hasConnection()) {
+      try {
+        await _dataSource.createPayedMonths(date);
+        return const Right(null);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
+  //get payed months
+  Future<Either<String, List<PayedMonths>>> getPayedMonths(
+      {required String id}) async {
+    if (await _hasConnection()) {
+      try {
+        final payedMonths = await _dataSource.getPayedMonthsByStudentId(id);
+        return Right(payedMonths);
       } catch (e) {
         return Left(ordinaryError);
       }

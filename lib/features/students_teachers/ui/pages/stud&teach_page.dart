@@ -74,6 +74,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
       },
       child: Scaffold(
         appBar: StudTeachAppBar(
+          search: true,
           context: context,
           title: !widget.isteacher
               ? AppPagesNames.studentsList
@@ -116,11 +117,18 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
 
   Widget _buildbloc() {
     return BlocBuilder<StudentCubit, StudentState>(
+      buildWhen: (previous, current) {
+        // Only rebuild if the current state is relevant
+        return current is StudentLoading ||
+            current is StudentLoaded ||
+            current is StudentError;
+      },
       builder: (context, state) {
         if (state is StudentLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is StudentLoaded) {
           return MyList(
+            previousContext: context,
             students: state.students,
             isteacher: widget.isteacher,
           );

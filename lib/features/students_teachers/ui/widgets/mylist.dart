@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
+import 'package:madrassat_iqraa/features/students_teachers/data/model/payed_months.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/pages/detail.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/info.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/pop_up_create.dart';
+import 'package:madrassat_iqraa/injection.dart';
 
 class MyList extends StatefulWidget {
   final List<Student> students;
   final bool isteacher;
+  final BuildContext previousContext;
 
-  const MyList({super.key, required this.students, required this.isteacher});
+  const MyList(
+      {super.key,
+      required this.students,
+      required this.isteacher,
+      required this.previousContext});
 
   @override
   State<MyList> createState() => _MyListState();
@@ -71,26 +81,59 @@ class _MyListState extends State<MyList> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                myListTile(Icons.payment, label1, null),
-                myListTile(
-                    Icons.update,
-                    'تعديل',
-                    () => showAddUserDialog(
-                        student: student,
-                        isUpdate: true,
-                        context: context,
-                        bithdateController: bithdateController,
-                        isTeacher: isTeacher,
-                        nameController: nameController,
-                        payDayController: payDayController,
-                        priceController: priceController,
-                        sexController: sexController)),
-                myListTile(Icons.details, 'تفاصيل', null),
+                //! daf3 mousta7a9at button
+                myListTile(Icons.payment, label1, () {
+                  if (!isTeacher && !student.payed) {
+                    PayedMonths date = PayedMonths(studentId: student.id);
+                    Student payedStudent = student.copyWith(payed: true);
+                    widget.previousContext
+                        .read<StudentCubit>()
+                        .createPayedMonths(date);
+
+                    widget.previousContext.read<StudentCubit>().updateStudent(
+                        student.id, payedStudent,
+                        isTeacher: isTeacher);
+                  }
+                }),
+
+                //! update button
+                myListTile(Icons.update, 'تعديل', () {
+                  showAddUserDialog(
+                      student: student,
+                      isUpdate: true,
+                      context: widget.previousContext,
+                      bithdateController: bithdateController,
+                      isTeacher: isTeacher,
+                      nameController: nameController,
+                      payDayController: payDayController,
+                      priceController: priceController,
+                      sexController: sexController);
+                }),
+
+                //! details button
+                myListTile(Icons.details, 'تفاصيل', () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                              create: (context) => getIt<StudentCubit>(),
+                              child: DetailPage(
+                                student: student,
+                              ),
+                            )),
+                  );
+                }),
                 Divider(
                   thickness: 2.sp,
                   height: 5,
                 ),
-                myListTile(Icons.delete, 'طرد', null),
+
+                //! delete button
+                myListTile(Icons.delete, 'طرد', () {
+                  widget.previousContext
+                      .read<StudentCubit>()
+                      .deleteStudent(student.id, isTeacher: isTeacher);
+                }),
               ],
             ),
           ),
@@ -109,8 +152,6 @@ class _MyListState extends State<MyList> {
           label,
           style: AppTextStyle.categories,
         ),
-        onTap: () {
-          func;
-        });
+        onTap: func);
   }
 }

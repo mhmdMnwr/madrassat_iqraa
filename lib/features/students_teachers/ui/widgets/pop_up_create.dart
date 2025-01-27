@@ -5,7 +5,7 @@ import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
-import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/create_update.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/create_update_search_fields.dart';
 
 Future<void> showAddUserDialog({
   Student? student,
@@ -39,7 +39,9 @@ Future<void> showAddUserDialog({
       return AlertDialog(
         title: Center(
             child: Text(
-          'إضافة ${isTeacher ? 'معلم' : 'طالب'}',
+          !isUpdate
+              ? 'إضافة ${isTeacher ? 'معلم' : 'طالب'}'
+              : 'تعديل ${isTeacher ? 'معلم' : 'طالب'}',
           style: AppTextStyle.mains,
         )),
         content: SingleChildScrollView(
@@ -108,7 +110,11 @@ Future<void> showAddUserDialog({
                     sex: sexController.text,
                     isTeacher: isTeacher,
                     birthDate: bithdateController.text,
-                    payed: false,
+                    payed: isTeacher
+                        ? true
+                        : isUpdate
+                            ? student!.payed
+                            : false,
                     money: int.parse(priceController.text),
                     payDay: payDayController.text,
                   );
@@ -119,7 +125,7 @@ Future<void> showAddUserDialog({
                   } else {
                     context.read<StudentCubit>().updateStudent(
                         student!.id, newStudent,
-                        isteacher: isTeacher);
+                        isTeacher: isTeacher);
                   }
                   if (Navigator.canPop(dialogContext)) {
                     Navigator.of(dialogContext).pop();
@@ -136,7 +142,7 @@ Future<void> showAddUserDialog({
                     EdgeInsets.symmetric(vertical: 12.0.h, horizontal: 24.0.w),
               ),
               child: Text(
-                'إضافة',
+                !isUpdate ? 'إضافة' : 'تعديل',
                 style: AppTextStyle.titles,
               ),
             ),

@@ -12,4 +12,5 @@ class AppPagesNames {
   static const String transactions = 'سجل المعاملات المالية';
   static const String search = 'بحث';
   static const String admin = 'المسوؤل';
+  static const String details = 'تفاصيل التبرعات';
 }

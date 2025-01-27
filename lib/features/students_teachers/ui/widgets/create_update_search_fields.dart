@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
-import 'dart:ui' as ui; // Import TextDirection from dart:ui
+import 'dart:ui' as ui;
+
+import 'package:madrassat_iqraa/core/theme/font.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart'; // Import TextDirection from dart:ui
 
 Widget cuTextField(String label, TextEditingController controller,
     {required String? Function(String?)? validator}) {
@@ -234,4 +238,73 @@ Widget genderField({required TextEditingController sexController}) {
       ),
     ),
   );
+}
+
+class ArabicSearchField extends StatefulWidget {
+  final BuildContext pcontext;
+  final bool isTeacher;
+  final TextEditingController controller;
+
+  const ArabicSearchField({
+    required this.pcontext,
+    super.key,
+    required this.controller,
+    required this.isTeacher,
+  });
+
+  @override
+  _ArabicSearchFieldState createState() => _ArabicSearchFieldState();
+}
+
+class _ArabicSearchFieldState extends State<ArabicSearchField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: widget.controller,
+      textAlign: TextAlign.right,
+      textDirection: ui.TextDirection.rtl,
+      style: AppTextStyle.categories,
+      decoration: InputDecoration(
+        hintText: 'بحث',
+        hintStyle: AppTextStyle.categories,
+        hintTextDirection: ui.TextDirection.rtl,
+        prefixIcon: Padding(
+          padding: EdgeInsets.only(left: 12.w),
+          child: Icon(Icons.search, color: Colors.grey, size: 35.sp),
+        ),
+        suffixIcon: widget.controller.text.isEmpty
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.close, color: Colors.grey),
+                onPressed: () {
+                  widget.controller.clear();
+                  context.read<StudentCubit>().searchStudents(
+                        '',
+                        isTeacher: widget.isTeacher,
+                      );
+                },
+              ),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: const BorderSide(color: Colors.blue, width: 2),
+        ),
+      ),
+      onChanged: (value) {
+        widget.pcontext
+            .read<StudentCubit>()
+            .searchStudents(value, isTeacher: widget.isTeacher);
+      },
+    );
+  }
 }
