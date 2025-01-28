@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:madrassat_iqraa/features/students_teachers/data/model/payed_months.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 
 class StudentRemoteDataSource {
@@ -8,48 +9,67 @@ class StudentRemoteDataSource {
 
   //! Get all students
   Future<List<Student>> getAllStudents() async {
-    final querySnapshot = await firestore.collection('students').get();
-    return querySnapshot.docs
-        .map((doc) => Student.fromJson(doc.data()))
-        .toList();
+    try {
+      final querySnapshot = await firestore.collection('students').get();
+      return querySnapshot.docs
+          .map((doc) => Student.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      // Handle any errors that occur during the fetch
+
+      return [];
+    }
   }
 
   //! Get student by ID
-  Future<Student?> getStudentById(int id) async {
-    final querySnapshot = await firestore
-        .collection('students')
-        .where('id', isEqualTo: id)
-        .limit(1)
-        .get();
+  Future<Student?> getStudentById(String id) async {
+    final querySnapshot = await firestore.collection('students').doc(id).get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      return Student.fromJson(querySnapshot.docs.first.data());
-    }
-    return null;
+    return Student.fromJson(querySnapshot.data()!);
   }
 
-  //! Get student by name
-  Future<List<Student>> getStudentsByNamePrefix(String namePrefix) async {
-    final querySnapshot = await firestore
+  //! Get students by name
+
+  Future<List<Student>> getStudentsByNamePrefix(String namePrefix,
+      {required bool isTeacher}) async {
+    if (namePrefix.isEmpty) return [];
+
+    final searchKey = namePrefix.toLowerCase();
+
+    final query = firestore
         .collection('students')
+        .where('isTeacher', isEqualTo: isTeacher)
         .orderBy('name')
-        .startAt([namePrefix]).get();
+        .startAt([
+      searchKey
+    ]) // Use the lowercased version for case-insensitive matching
+        .endAt([
+      '$searchKey\uf8ff'
+    ]); // \uf8ff is a high Unicode character to match the entire range
+
+    final querySnapshot = await query.get();
 
     return querySnapshot.docs
-        .map((doc) => Student.fromJson(doc.data()))
+        .map((doc) => Student.fromJson(
+            doc.data() as Map<String, dynamic>)) // Safely cast the doc data
         .toList();
   }
 
   //! Get students by isTeacher
   Future<List<Student>> getStudentsByIsTeacher({bool isTeacher = true}) async {
-    final querySnapshot = await firestore
-        .collection('students')
-        .where('isTeacher', isEqualTo: isTeacher)
-        .get();
+    try {
+      final querySnapshot = await firestore
+          .collection('students')
+          .where('isTeacher', isEqualTo: isTeacher)
+          .get();
 
-    return querySnapshot.docs
-        .map((doc) => Student.fromJson(doc.data()))
-        .toList();
+      return querySnapshot.docs
+          .map((doc) => Student.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      // Handle any errors that occur during the fetch
+      return [];
+    }
   }
 
   Future<List<Student>> getpayedStudents(
@@ -72,7 +92,7 @@ class StudentRemoteDataSource {
   }
 
   //! Update an existing student
-  Future<void> updateStudent(int id, Student student) async {
+  Future<void> updateStudent(String id, Student student) async {
     final querySnapshot = await firestore
         .collection('students')
         .where('id', isEqualTo: id)
@@ -89,7 +109,7 @@ class StudentRemoteDataSource {
   }
 
   //! Delete a student
-  Future<void> deleteStudent(int id) async {
+  Future<void> deleteStudent(String id) async {
     final querySnapshot = await firestore
         .collection('students')
         .where('id', isEqualTo: id)
@@ -100,5 +120,35 @@ class StudentRemoteDataSource {
       final docId = querySnapshot.docs.first.id;
       await firestore.collection('students').doc(docId).delete();
     }
+  }
+
+  //! change all students payed status
+  Future<void> changeAllStudentsPayedStatus() async {
+    final querySnapshot = await firestore
+        .collection('students')
+        .where('isTeacher', isEqualTo: false)
+        .get();
+
+    for (final doc in querySnapshot.docs) {
+      await doc.reference.update({'payed': false});
+    }
+  }
+
+  //! create payed months
+  Future<void> createPayedMonths(PayedMonths date) async {
+    final docRef = firestore.collection('payedMonths').doc();
+    await docRef.set(date.toJson());
+  }
+
+  //! Get payed months by id
+  Future<List<PayedMonths>> getPayedMonthsByStudentId(String studentId) async {
+    final querySnapshot = await firestore
+        .collection('payedMonths')
+        .where('studentId', isEqualTo: studentId)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => PayedMonths.fromJson(doc.data()))
+        .toList();
   }
 }

@@ -1,0 +1,139 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:madrassat_iqraa/core/string.dart';
+import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/create_update_search_fields.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/mylist.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/stud_teach_app_bar.dart';
+
+class SearchPage extends StatefulWidget {
+  final bool isTeacher;
+  const SearchPage({
+    super.key,
+    this.isTeacher = true,
+  });
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<StudentCubit, StudentState>(
+      listener: (context, state) {
+        if (state is StudentOperationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تمت العملية بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else if (state is StudentError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (state is StudentLoading) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('جاري المعالجة...'),
+              backgroundColor: AppColors.vibrantOrange,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: StudTeachAppBar(
+          context: context,
+          title: AppPagesNames.search,
+          search: false,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _buildArabicSearchField(widget.isTeacher),
+            ),
+            Expanded(
+              child: _buildSearchResults(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildArabicSearchField(bool isTeacher) {
+    return ArabicSearchField(
+      isTeacher: isTeacher,
+      controller: _searchController,
+      pcontext: context,
+    );
+  }
+
+  Widget _buildSearchResults() {
+    return BlocBuilder<StudentCubit, StudentState>(
+      builder: (context, state) {
+        if (state is StudentLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is SearchedStudentLoaded) {
+          if (state.students.isEmpty) {
+            return const Center(
+              child: Text(
+                'لا توجد نتائج',
+                style: TextStyle(
+                  fontFamily: AppStrings.fontfam,
+                  fontSize: 18,
+                ),
+              ),
+            );
+          }
+          return MyList(
+            previousContext: context,
+            students: state.students,
+            isteacher: widget.isTeacher,
+          );
+        } else if (state is StudentError) {
+          return Center(
+            child: Text(
+              'خطأ: ${state.message}',
+              style: const TextStyle(
+                fontFamily: 'Tajawal',
+                fontSize: 16,
+                color: Colors.red,
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text(
+              'ابدأ البحث...',
+              style: TextStyle(
+                fontFamily: AppStrings.fontfam,
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+}
