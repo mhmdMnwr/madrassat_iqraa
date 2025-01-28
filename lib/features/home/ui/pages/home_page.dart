@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/admin/strings.dart';
 import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
@@ -64,7 +65,10 @@ class _HomePageState extends State<HomePage> {
             curvedAppBar(269),
             const Logo(),
             HiText(),
-            adminCounts(),
+            BlocProvider(
+              create: (context) => getIt<AdminCubit>(),
+              child: AdminCounts(),
+            ),
             Column(
               children: [
                 SizedBox(height: 350.h),

@@ -1,10 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
+import 'package:madrassat_iqraa/core/admin/model/admin_model.dart';
 import 'package:madrassat_iqraa/core/string.dart';
-import 'package:madrassat_iqraa/core/admin/admin_state.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 
-Widget adminCounts() {
+class AdminCounts extends StatefulWidget {
+  @override
+  _AdminCountsState createState() => _AdminCountsState();
+}
+
+class _AdminCountsState extends State<AdminCounts> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AdminCubit>().getAdminData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
+      if (state is AdminLoading) {
+        return builder(
+          error: true,
+        );
+      } else if (state is AdminLoaded) {
+        return builder(schoolState: state.schoolState);
+      } else if (state is AdminError) {
+        return builder(error: true, message: state.message);
+      } else {
+        return Center(
+          child: Container(
+            color: Colors.red,
+          ),
+        );
+      }
+    });
+  }
+}
+
+Widget builder({
+  bool error = false,
+  String message = "-----",
+  SchoolState? schoolState,
+}) {
   return Positioned(
     top: 219.h,
     left: 30.w,
@@ -34,8 +74,8 @@ Widget adminCounts() {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          nums(
-            text: "teacherCount",
+          numHolder(
+            text: error ? message : schoolState?.teacherCount,
             text2: "عدد المعلمين",
           ),
           VerticalDivider(
@@ -43,8 +83,9 @@ Widget adminCounts() {
             thickness: 0.5,
             width: 5.w,
           ),
-          nums(
-            text: "totalFunds",
+          numHolder(
+            da: true,
+            text: error ? message : schoolState?.totalFunds,
             text2: "مبلغ الميزانية",
           ),
           VerticalDivider(
@@ -52,8 +93,8 @@ Widget adminCounts() {
             thickness: 0.5,
             width: 5.w,
           ),
-          nums(
-            text: "studentCount",
+          numHolder(
+            text: error ? message : schoolState?.studentCount,
             text2: "عدد الطلاب",
           ),
         ],
@@ -97,34 +138,5 @@ Widget numHolder({
         ),
       ],
     ),
-  );
-}
-
-dynamic nums({
-  required String text,
-  required String text2,
-}) {
-  return FutureBuilder<Map<String, dynamic>?>(
-    future: AdminStatsService().getStats(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return numHolder(
-          text: "---",
-          text2: text2,
-        );
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else if (snapshot.hasData) {
-        // Access the 'studentCount' from the map safely
-        final count = snapshot.data?[text] ?? 0;
-        return numHolder(
-          da: (text2 == "مبلغ الميزانية"),
-          text: count,
-          text2: text2,
-        );
-      } else {
-        return Text('No data available');
-      }
-    },
   );
 }

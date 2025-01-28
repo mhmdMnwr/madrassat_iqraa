@@ -49,7 +49,7 @@ class _HiTextState extends State<HiText> {
 
 Widget _blocBuilder() =>
     BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-      if (state is UserLoaded) {
+      if (state is MeUserLoaded) {
         return Text(
           state.user.userName,
           style: AppTextStyle.titles,

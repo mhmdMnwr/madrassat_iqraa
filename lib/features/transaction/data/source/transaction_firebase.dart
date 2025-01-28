@@ -33,12 +33,14 @@ class TransactionsRemoteDataSource {
   }
 
 //!getLastMonthByUser
+
   Future<List<Transactions>> getLastMonthByUser(String userId) async {
     final DateTime lastMonth = DateTime.now().subtract(Duration(days: 30));
     final querySnapshot = await _firestore
         .collection('transactions')
         .where('user', isEqualTo: userId)
         .where('createdAt', isGreaterThanOrEqualTo: lastMonth.toIso8601String())
+        .orderBy('createdAt', descending: false)
         .get();
     return querySnapshot.docs
         .map((doc) => Transactions.fromJson(doc.data()))

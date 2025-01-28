@@ -29,11 +29,11 @@ class AcceptedUsersLoaded extends UserState {
   AcceptedUsersLoaded(this.updatedUsers, this.acceptedUsers);
 }
 
-// class IdLoaded extends UserState {
-//   final String userId;
+class MeUserLoaded extends UserState {
+  final User user;
 
-//   IdLoaded(this.userId);
-// }
+  MeUserLoaded(this.user);
+}
 
 class UserSaved extends UserState {} // State when user ID is successfully saved
 

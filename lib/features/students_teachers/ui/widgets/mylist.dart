@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/payed_months.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
@@ -90,9 +91,17 @@ class _MyListState extends State<MyList> {
                         .read<StudentCubit>()
                         .createPayedMonths(date);
 
-                    widget.previousContext.read<StudentCubit>().updateStudent(
+                    widget.previousContext.read<StudentCubit>().updatePayed(
                         student.id, payedStudent,
                         isTeacher: isTeacher);
+                  } else if (isTeacher) {
+                    Student payedStudent = student.copyWith(payed: true);
+                    widget.previousContext.read<StudentCubit>().updatePayed(
+                        student.id, payedStudent,
+                        isTeacher: isTeacher);
+                    widget.previousContext
+                        .read<AdminCubit>()
+                        .removeFunds(amount: payedStudent.money);
                   }
                 }),
 

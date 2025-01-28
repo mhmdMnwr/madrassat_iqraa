@@ -43,7 +43,7 @@ class StudentCubit extends Cubit<StudentState> {
     final result = await _repository.createStudent(student);
     result.fold(
       (failure) => emit(StudentError(message: failure)),
-      (_) => emit(StudentOperationSuccess()),
+      (_) => emit(StudentAdded()),
     );
     await loadStudents(isteacher: isTeacher); // Refresh after adding
   }
@@ -54,7 +54,17 @@ class StudentCubit extends Cubit<StudentState> {
     final result = await _repository.updateStudent(id, student);
     result.fold(
       (failure) => emit(StudentError(message: failure)),
-      (_) => emit(StudentOperationSuccess()),
+      (_) => emit(StudentUpdated()),
+    );
+    await loadStudents(isteacher: isTeacher); // Refresh after updating
+  }
+
+  Future<void> updatePayed(String id, Student student,
+      {required bool isTeacher}) async {
+    final result = await _repository.updateStudent(id, student);
+    result.fold(
+      (failure) => emit(StudentError(message: failure)),
+      (_) => emit(StudentPayed()),
     );
     await loadStudents(isteacher: isTeacher); // Refresh after updating
   }
@@ -64,7 +74,7 @@ class StudentCubit extends Cubit<StudentState> {
     final result = await _repository.deleteStudent(id);
     result.fold(
       (failure) => emit(StudentError(message: failure)),
-      (_) => emit(StudentOperationSuccess()),
+      (_) => emit(StudentDeleted()),
     );
     await loadStudents(isteacher: isTeacher); // Refresh after deleting
   }

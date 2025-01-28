@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/navigation/main_page.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/pages/admin.dart';
@@ -36,8 +37,15 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: '/home',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<UserCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AdminCubit>(),
+                ),
+              ],
               child: HomePage(),
             )),
     GoRoute(
@@ -58,32 +66,66 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: '/studentsList',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<StudentCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<StudentCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AdminCubit>(),
+                ),
+              ],
               child: StudentsTeachersPage(
                 isteacher: false,
               ),
             )),
     GoRoute(
         path: '/teachersList',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<StudentCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<StudentCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AdminCubit>(),
+                ),
+              ],
               child: StudentsTeachersPage(
                 isteacher: true,
               ),
             )),
     GoRoute(
         path: '/expenses',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<TransactionsCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<TransactionsCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AdminCubit>(),
+                ),
+              ],
               child: const IncomeExpensePage(
                 isIncome: false,
               ),
             )),
     GoRoute(
         path: '/income',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<TransactionsCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<TransactionsCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AdminCubit>(),
+                ),
+              ],
               child: const IncomeExpensePage(
                 isIncome: true,
               ),

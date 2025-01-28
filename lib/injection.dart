@@ -2,6 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
+import 'package:madrassat_iqraa/core/admin/repo/admin_repo.dart';
+import 'package:madrassat_iqraa/core/admin/source/admin_firebase_service.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 import 'package:madrassat_iqraa/features/home/data/source/local_data_source.dart';
 import 'package:madrassat_iqraa/features/home/data/source/user_database.dart';
@@ -88,5 +91,21 @@ Future<void> setupInjection() async {
     () => TransactionsCubit(repository: getIt<TransactionsRepository>()),
   );
 
-  // Register other services, repositories, and cubits as needed.
+  //! Register AdminRemoteDataSource
+  getIt.registerLazySingleton<AdminRemoteDataSource>(
+    () => AdminRemoteDataSource(firestore: getIt<FirebaseFirestore>()),
+  );
+
+  //! Register AdminRepository
+  getIt.registerLazySingleton<AdminRepository>(
+    () => AdminRepository(
+      remoteDataSource: getIt<AdminRemoteDataSource>(),
+      connectionChecker: getIt<InternetConnectionChecker>(),
+    ),
+  );
+
+  //! Register AdminCubit
+  getIt.registerFactory<AdminCubit>(
+    () => AdminCubit(adminRepository: getIt<AdminRepository>()),
+  );
 }

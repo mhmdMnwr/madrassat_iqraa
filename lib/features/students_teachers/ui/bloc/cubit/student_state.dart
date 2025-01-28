@@ -46,6 +46,18 @@ class StudentError extends StudentState {
 // State when a student operation (add/update/delete) succeeds
 class StudentOperationSuccess extends StudentState {}
 
+// State when a student is successfully added
+class StudentAdded extends StudentState {}
+
+// State when a student is successfully deleted
+class StudentDeleted extends StudentState {}
+
+// State when a student is successfully updated
+class StudentUpdated extends StudentState {}
+
+// State when a student is successfully payed
+class StudentPayed extends StudentState {}
+
 class PayedMonthsLoaded extends StudentState {
   final List<PayedMonths> dates;
 

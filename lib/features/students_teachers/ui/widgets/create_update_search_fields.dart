@@ -14,80 +14,84 @@ Widget cuTextField(String label, TextEditingController controller,
   return SizedBox(
     width: 300.w,
     child: TextFormField(
-        textAlign: TextAlign.right,
-        // textDirection: TextDirection.rtl,
-        controller: controller,
-        style: TextStyle(
+      textAlign: TextAlign.right,
+      controller: controller,
+      style: TextStyle(
+        fontFamily: AppStrings.fontfam,
+        fontWeight: FontWeight.w500,
+        color: AppColors.skyBlue,
+        fontSize: 22.sp,
+      ),
+      decoration: InputDecoration(
+        hintText: label,
+        hintStyle: TextStyle(
           fontFamily: AppStrings.fontfam,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
           color: AppColors.skyBlue,
-          fontSize: 22.sp,
+          fontSize: 20.sp,
         ),
-        decoration: InputDecoration(
-          hintText: label,
-          hintStyle: TextStyle(
-            fontFamily: AppStrings.fontfam,
-            fontWeight: FontWeight.w400,
+        alignLabelWithHint: true,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 14.h,
+          horizontal: 18.w,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0.sp),
+          borderSide: BorderSide(
+            color: AppColors.navyBlue,
+            width: 1.8,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0.sp),
+          borderSide: BorderSide(
             color: AppColors.skyBlue,
-            fontSize: 20.sp,
-          ),
-          alignLabelWithHint: true,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 14.h, horizontal: 18.w),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0.sp),
-            borderSide: BorderSide(
-              color: AppColors.navyBlue,
-              width: 1.8,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0.sp),
-            borderSide: BorderSide(
-              color: AppColors.skyBlue,
-              width: 1.8,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0.sp),
-            borderSide: BorderSide(
-              color: AppColors.vibrantOrange,
-              width: 2.2,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0.sp),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: 2.0,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0.sp),
-            borderSide: BorderSide(
-              color: Colors.redAccent,
-              width: 2.5,
-            ),
-          ),
-          suffixIconConstraints: BoxConstraints(
-            maxHeight: 50.h,
-            maxWidth: 50.w,
-          ),
-          suffixIcon: Padding(
-            padding: EdgeInsets.only(left: 12.w, right: 8.w),
-            child: Icon(
-              Icons.edit,
-              color: AppColors.navyBlue,
-              size: 28.sp,
-            ),
+            width: 1.8,
           ),
         ),
-        textAlignVertical: TextAlignVertical.center,
-        cursorColor: AppColors.skyBlue,
-        keyboardType: TextInputType.text,
-        validator: validator),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0.sp),
+          borderSide: BorderSide(
+            color: AppColors.vibrantOrange,
+            width: 2.2,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0.sp),
+          borderSide: BorderSide(
+            color: Colors.redAccent,
+            width: 2.0,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0.sp),
+          borderSide: BorderSide(
+            color: Colors.redAccent,
+            width: 2.5,
+          ),
+        ),
+        suffixIconConstraints: BoxConstraints(
+          maxHeight: 50.h,
+          maxWidth: 50.w,
+        ),
+        suffixIcon: Padding(
+          padding: EdgeInsets.only(left: 12.w, right: 8.w),
+          child: Icon(
+            Icons.edit,
+            color: AppColors.navyBlue,
+            size: 28.sp,
+          ),
+        ),
+      ),
+      textAlignVertical: TextAlignVertical.center,
+      cursorColor: AppColors.skyBlue,
+      keyboardType: TextInputType.multiline, // Allow multiline input
+      maxLines: null, // Makes the field grow dynamically
+      minLines: 1, // Sets the initial height
+      validator: validator,
+    ),
   );
 }
 

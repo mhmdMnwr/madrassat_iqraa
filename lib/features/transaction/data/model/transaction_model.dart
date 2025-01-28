@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:madrassat_iqraa/core/helper/id_generator.dart';
 
 class Transactions extends Equatable {
-  final String userID;
+  final String userName;
   final bool type; // true for income, false for expense
   final int amount; // amount of the transaction
   final String description; // description of the transaction
@@ -12,7 +12,7 @@ class Transactions extends Equatable {
   Transactions({
     String? id,
     required this.type,
-    required this.userID,
+    required this.userName,
     required this.amount,
     required this.description,
     DateTime? createdAt,
@@ -20,7 +20,7 @@ class Transactions extends Equatable {
         id = id ?? IdGenerator.generateId();
 
   @override
-  List<Object?> get props => [type, amount, description, createdAt, userID];
+  List<Object?> get props => [type, amount, description, createdAt, userName];
 
   // Factory constructor to create a Transaction instance from JSON
   factory Transactions.fromJson(Map<String, dynamic> json) {
@@ -29,7 +29,7 @@ class Transactions extends Equatable {
       type: json['type'] as bool,
       amount: json['amount'] as int,
       description: json['description'] as String,
-      userID: json['userID'] as String,
+      userName: json['userName'] as String,
       // Parse createdAt from String to DateTime
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
@@ -42,7 +42,7 @@ class Transactions extends Equatable {
       'type': type,
       'amount': amount,
       'description': description,
-      'userID': userID,
+      'userName': userName,
       'createdAt': createdAt.toIso8601String(),
     };
   }

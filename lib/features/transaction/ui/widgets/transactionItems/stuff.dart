@@ -38,7 +38,7 @@ Widget infoColumn({required Transactions transaction}) {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('عامر محمد منور',
+            Text(transaction.userName,
                 textAlign: TextAlign.right,
                 style: TextStyle(
                     fontFamily: AppStrings.fontfam,
@@ -47,7 +47,7 @@ Widget infoColumn({required Transactions transaction}) {
                     fontSize: 18.sp)),
             timeRow(
                 time:
-                    '${transaction.createdAt.hour}:${transaction.createdAt.minute}',
+                    '${transaction.createdAt.hour.toString().padLeft(2, '0')}:${transaction.createdAt.minute.toString().padLeft(2, '0')}',
                 icon: AppIcons.clock),
             SizedBox(
               height: 5.h,

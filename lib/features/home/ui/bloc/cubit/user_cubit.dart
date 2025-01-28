@@ -17,7 +17,7 @@ class UserCubit extends Cubit<UserState> {
     result.fold(
       (error) => emit(UserError(error)),
       (user) => user != null
-          ? emit(UserLoaded(user))
+          ? emit(MeUserLoaded(user))
           : emit(UserError('User not found')),
     );
   }

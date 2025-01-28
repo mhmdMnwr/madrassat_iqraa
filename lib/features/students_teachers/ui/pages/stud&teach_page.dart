@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
@@ -49,13 +50,48 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
   Widget build(BuildContext context) {
     return BlocListener<StudentCubit, StudentState>(
       listener: (context, state) {
-        if (state is StudentOperationSuccess) {
+        if (state is StudentPayed) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('تمت العملية بنجاح'),
               backgroundColor: Colors.green,
             ),
           );
+
+          if (!widget.isteacher) {
+            context.read<AdminCubit>().addFunds(amount: 800);
+          }
+        } else if (state is StudentUpdated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تم التعديل بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else if (state is StudentAdded) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تمت الإضافة بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          if (widget.isteacher) {
+            context.read<AdminCubit>().addTeacher();
+          } else {
+            context.read<AdminCubit>().addStudent();
+          }
+        } else if (state is StudentDeleted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تم الحذف بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          if (widget.isteacher) {
+            context.read<AdminCubit>().removeTeacher();
+          } else {
+            context.read<AdminCubit>().removeStudent();
+          }
         } else if (state is StudentError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

@@ -66,11 +66,14 @@ class TransactionsCubit extends Cubit<TransactionsState> {
 
   Future<void> createTransaction(Transactions transaction) async {
     emit(TransactionsLoading());
+
     final result = await repository.createTransaction(transaction);
     result.fold(
       (error) => emit(TransactionsError(error)),
       (_) => emit(
-          TransactionCreated()), // Emit success state if transaction created
+        TransactionCreated(),
+      ), // Emit success state if transaction created
     );
+    //Load the last transaction after creating a new transaction
   }
 }

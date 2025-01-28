@@ -41,8 +41,8 @@ Widget addTransactionIcons(bool isIncome, VoidCallback? addTranaction) {
 
 Widget info(
     {required bool isIncome,
-    required int monthIncExp,
-    required int totalFund}) {
+    required dynamic monthIncExp,
+    required dynamic totalFund}) {
   return Padding(
     padding: EdgeInsets.fromLTRB(30.w, 10.h, 10.w, 21.h),
     child: Column(

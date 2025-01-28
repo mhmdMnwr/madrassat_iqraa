@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/widgets/amount/am_stuff.dart';
 
 Widget amount({
-  required int monthIncExp,
-  required int totalFund,
+  required dynamic monthIncExp,
+  required dynamic totalFund,
   required bool isIncome,
   required VoidCallback? addTransaction,
 }) {
