@@ -69,6 +69,15 @@ class StudentCubit extends Cubit<StudentState> {
     await loadStudents(isteacher: isTeacher); // Refresh after deleting
   }
 
+  //change all students payed status
+  Future<void> changeAllStudentsPayedStatus() async {
+    final result = await _repository.changeAllStudentsPayedStatus();
+    result.fold(
+      (failure) => emit(StudentError(message: failure)),
+      (_) => emit(StudentOperationSuccess()),
+    );
+  }
+
   //create payed months
   Future<void> createPayedMonths(PayedMonths date) async {
     final result = await _repository.createPayedMonths(date);

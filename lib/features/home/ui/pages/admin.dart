@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:madrassat_iqraa/core/string.dart';
+import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/admin/list_items.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/stud_teach_app_bar.dart';
 
 class Admin extends StatefulWidget {
@@ -21,13 +24,36 @@ class _AdminState extends State<Admin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: StudTeachAppBar(
-        context: context,
-        title: AppPagesNames.admin,
-        search: false,
+    return BlocListener<StudentCubit, StudentState>(
+      listener: (context, state) {
+        if (state is StudentOperationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('تمت العملية بنجاح'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else if (state is StudentError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: StudTeachAppBar(
+          onReset: () {
+            context.read<StudentCubit>().changeAllStudentsPayedStatus();
+          },
+          reset: true,
+          context: context,
+          title: AppPagesNames.admin,
+          search: false,
+        ),
+        body: _buildbloc(),
       ),
-      body: _buildbloc(),
     );
   }
 

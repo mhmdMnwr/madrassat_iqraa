@@ -4,10 +4,13 @@ import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/core/theme/icons.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 
 class StudTeachAppBar extends AppBar {
   StudTeachAppBar({
     super.key,
+    bool reset = false,
+    void Function()? onReset,
     required bool search,
     bool isteacher = false,
     required String title,
@@ -27,23 +30,31 @@ class StudTeachAppBar extends AppBar {
               ),
             ],
           ),
-          leading: search
+          leading: reset
               ? IconButton(
-                  icon: Image.asset(AppIcons.search),
-                  onPressed: () {
-                    if (isteacher) {
-                      navigateToPage(context, "searchTeacher");
-                    } else {
-                      navigateToPage(context, "searchStudent");
-                    }
-                  },
-                )
-              : Container(),
+                  onPressed: onReset,
+                  icon: Icon(
+                    Icons.settings_backup_restore,
+                    color: Colors.white,
+                    size: 40.sp,
+                  ))
+              : search
+                  ? IconButton(
+                      icon: Image.asset(AppIcons.search),
+                      onPressed: () {
+                        if (isteacher) {
+                          navigateToPage(context, "searchTeacher");
+                        } else {
+                          navigateToPage(context, "searchStudent");
+                        }
+                      },
+                    )
+                  : Container(),
           actions: [
             IconButton(
               icon: Image.asset(AppIcons.back1),
               onPressed: () {
-                if (search) {
+                if (search || reset) {
                   navigateToPage(context, 'home');
                 } else {
                   if (isteacher) {

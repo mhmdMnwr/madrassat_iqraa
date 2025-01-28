@@ -16,13 +16,13 @@ class payedMonthList extends StatelessWidget {
     return ListView.builder(
       itemCount: dates.length, // Adjust the item count as needed
       itemBuilder: (context, index) {
-        return monthList(index: index, date: dates[index].toString());
+        return monthList(index: index, date: dates[index].payedDates);
       },
     );
   }
 }
 
-Widget monthList({required int index, required String date}) {
+Widget monthList({required int index, required DateTime date}) {
   return Padding(
     padding: EdgeInsets.fromLTRB(6.w, (index == 0) ? 255.h : 12.h, 6.w, 0),
     child: Container(
@@ -32,7 +32,7 @@ Widget monthList({required int index, required String date}) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _moneyRow(isIncome: true, date: date),
+          _moneyRow(isIncome: true),
           _infoColumn(date: date),
         ],
       ),
@@ -40,7 +40,7 @@ Widget monthList({required int index, required String date}) {
   );
 }
 
-Widget _infoColumn({required String date}) {
+Widget _infoColumn({required DateTime date}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 30.w,
@@ -54,16 +54,12 @@ Widget _infoColumn({required String date}) {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            timeRow(
-                time:
-                    '${DateTime.parse(date).hour}:${DateTime.parse(date).minute}',
-                icon: AppIcons.clock),
+            timeRow(time: '${date.hour}:${date.minute}', icon: AppIcons.clock),
             SizedBox(
               height: 5.h,
             ),
             timeRow(
-                time:
-                    '${DateTime.parse(date).day}/${DateTime.parse(date).month}/${DateTime.parse(date).year}',
+                time: '${date.day}/${date.month}/${date.year}',
                 icon: AppIcons.calendar),
           ],
         ),
@@ -72,7 +68,9 @@ Widget _infoColumn({required String date}) {
   );
 }
 
-Widget _moneyRow({required bool isIncome, required String date}) {
+Widget _moneyRow({
+  required bool isIncome,
+}) {
   return Padding(
     padding: EdgeInsets.only(
       left: 25.w,

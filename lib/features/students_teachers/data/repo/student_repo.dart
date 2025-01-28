@@ -146,6 +146,20 @@ class StudentRepository {
     }
   }
 
+  //change payed status
+  Future<Either<String, void>> changeAllStudentsPayedStatus() async {
+    if (await _hasConnection()) {
+      try {
+        await _dataSource.changeAllStudentsPayedStatus();
+        return const Right(null);
+      } catch (e) {
+        return Left(ordinaryError);
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
   // create payed months
   Future<Either<String, void>> createPayedMonths(PayedMonths date) async {
     if (await _hasConnection()) {

@@ -111,18 +111,19 @@ class _MyListState extends State<MyList> {
                 }),
 
                 //! details button
-                myListTile(Icons.details, 'تفاصيل', () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                              create: (context) => getIt<StudentCubit>(),
-                              child: DetailPage(
-                                student: student,
-                              ),
-                            )),
-                  );
-                }),
+                if (!isTeacher)
+                  myListTile(Icons.details, 'تفاصيل', () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                                create: (context) => getIt<StudentCubit>(),
+                                child: DetailPage(
+                                  student: student,
+                                ),
+                              )),
+                    );
+                  }),
                 Divider(
                   thickness: 2.sp,
                   height: 5,

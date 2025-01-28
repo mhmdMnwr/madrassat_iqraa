@@ -122,6 +122,18 @@ class StudentRemoteDataSource {
     }
   }
 
+  //! change all students payed status
+  Future<void> changeAllStudentsPayedStatus() async {
+    final querySnapshot = await firestore
+        .collection('students')
+        .where('isTeacher', isEqualTo: false)
+        .get();
+
+    for (final doc in querySnapshot.docs) {
+      await doc.reference.update({'payed': false});
+    }
+  }
+
   //! create payed months
   Future<void> createPayedMonths(PayedMonths date) async {
     final docRef = firestore.collection('payedMonths').doc();
@@ -136,7 +148,7 @@ class StudentRemoteDataSource {
         .get();
 
     return querySnapshot.docs
-        .map((doc) => PayedMonths.fromJson(doc.data() as Map<String, dynamic>))
+        .map((doc) => PayedMonths.fromJson(doc.data()))
         .toList();
   }
 }

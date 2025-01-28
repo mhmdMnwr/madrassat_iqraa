@@ -30,4 +30,9 @@ class AppTextStyle {
       fontWeight: FontWeight.w700,
       color: Colors.black,
       fontSize: 16.sp);
+  static TextStyle bluetext = TextStyle(
+      fontFamily: AppStrings.fontfam,
+      fontWeight: FontWeight.w700,
+      color: AppColors.richRed,
+      fontSize: 16.sp);
 }

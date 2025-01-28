@@ -40,14 +40,7 @@ class Student extends Equatable {
         _payed = payed;
 
   // Computed getter for `payed`
-  bool get payed {
-    final today = DateTime.now();
-    // Reset to false if it's the 25th and the student is not a teacher
-    if (!isTeacher && today.day == 25) {
-      return false;
-    }
-    return _payed;
-  }
+  bool get payed => _payed;
 
   // Setter to update the private `_payed` field
   set payed(bool value) => _payed = value;

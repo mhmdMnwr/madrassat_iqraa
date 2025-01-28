@@ -5,19 +5,19 @@ class PayedMonths {
   PayedMonths({
     required this.studentId,
     DateTime? payedDates,
-  }) : payedDates = DateTime.now();
+  }) : payedDates = payedDates ?? DateTime.now();
 
   factory PayedMonths.fromJson(Map<String, dynamic> json) {
     return PayedMonths(
       studentId: json['studentId'],
-      payedDates: json['payedDates'],
+      payedDates: DateTime.parse(json['payedDates'] as String),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'studentId': studentId,
-      'payedDates': payedDates,
+      'payedDates': payedDates.toIso8601String(),
     };
   }
 }

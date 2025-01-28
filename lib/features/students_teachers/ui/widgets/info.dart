@@ -14,7 +14,7 @@ class UserInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100.h,
+      height: !isteacher ? 100.h : 120.h,
       margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -63,12 +63,16 @@ class UserInfoCard extends StatelessWidget {
 
                   // ID
                   Text(
-                    !isteacher
-                        ? "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}"
-                        : "تاريخ الانضمام: ${student.payDay.substring(0, 10).replaceAll('-', '/')}",
+                    "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}",
                     style: AppTextStyle.text,
                     textAlign: TextAlign.right,
                   ),
+                  if (isteacher)
+                    Text(
+                      "تاريخ الإنضمام: ${student.payDay.substring(0, 10).replaceAll('-', '/')}",
+                      style: AppTextStyle.bluetext,
+                      textAlign: TextAlign.right,
+                    ),
                 ],
               ),
             ),

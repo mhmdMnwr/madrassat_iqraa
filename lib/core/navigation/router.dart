@@ -93,8 +93,15 @@ final GoRouter router = GoRouter(
         builder: (context, state) => const TransactionPage()),
     GoRoute(
         path: '/admin',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<UserCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<StudentCubit>(),
+                ),
+              ],
               child: const Admin(),
             )),
   ],
