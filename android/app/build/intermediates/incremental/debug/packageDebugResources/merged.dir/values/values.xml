@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">538554179423</string>
+    <string name="google_api_key" translatable="false">AIzaSyDBYWGGLkojaTmdxWYfgmNGvToGdPmFNk0</string>
+    <string name="google_app_id" translatable="false">1:538554179423:android:e0f1ef642db1b82eab20ea</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDBYWGGLkojaTmdxWYfgmNGvToGdPmFNk0</string>
+    <string name="google_storage_bucket" translatable="false">madrassat-iqraa-elsalafia.appspot.com</string>
+    <string name="project_id" translatable="false">madrassat-iqraa-elsalafia</string>
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        
+        <item name="android:windowBackground">@drawable/launch_background</item>
+    </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">?android:colorBackground</item>
+    </style>
+</resources>

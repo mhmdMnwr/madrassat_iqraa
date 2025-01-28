@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_notch_bottom_bar: ^1.0.3
+  bloc: ^8.1.4
   cloud_firestore: ^5.4.4
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
@@ -36,8 +38,18 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
+  flutter_localizations:
+    sdk: flutter
+  flutter_native_splash: ^2.4.3
+  flutter_screenutil: ^5.9.3
   get_it: ^8.0.1
+  go_router: ^14.3.0
+  google_api_availability: ^5.0.0
+  icons_plus: ^5.0.0
   internet_connection_checker: ^1.0.0+1
+  intl: ^0.19.0
+  provider: ^6.1.2
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -48,14 +60,26 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/amiri-regular.ttf
+        - asset: assets/fonts/amiri-bold.ttf
+          weight: 700
+        - asset: assets/fonts/amiri-boldslanted.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/amiri-quran.ttf
+        - asset: assets/fonts/amiri-quran-colored.ttf
+        - asset: assets/fonts/amiri-slanted.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:madrassat_iqraa/features/transaction/ui/widgets/amount/am_stuff.dart';
+
+Widget amount({
+  required int monthIncExp,
+  required int totalFund,
+  required bool isIncome,
+  required VoidCallback? addTransaction,
+}) {
+  return Positioned(
+    top: 90.h,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      child: Container(
+          height: 150.h,
+          width: 350.w,
+          decoration: border(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              addTransactionIcons(
+                isIncome,
+                addTransaction,
+              ),
+              info(
+                isIncome: isIncome,
+                monthIncExp: monthIncExp,
+                totalFund: totalFund,
+              ),
+            ],
+          )),
+    ),
+  );
+}
