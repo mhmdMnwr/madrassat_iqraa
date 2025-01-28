@@ -44,7 +44,7 @@ Widget info(
     required dynamic monthIncExp,
     required dynamic totalFund}) {
   return Padding(
-    padding: EdgeInsets.fromLTRB(30.w, 10.h, 10.w, 21.h),
+    padding: EdgeInsets.fromLTRB(20.w, 10.h, 4.w, 10.h),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -60,28 +60,34 @@ Widget info(
         SizedBox(
           height: 10.h,
         ),
-        Text(
-          "$totalFund دج",
-          textDirection: TextDirection.rtl,
-          style: TextStyle(
-            fontFamily: AppStrings.fontfam,
-            fontSize: 25.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColors.skyBlue,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            "$totalFund دج",
+            textDirection: TextDirection.rtl,
+            style: TextStyle(
+              fontFamily: AppStrings.fontfam,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.skyBlue,
+            ),
           ),
         ),
         SizedBox(
-          height: 15.h,
+          height: 10.h,
         ),
-        Text(
-          isIncome
-              ? 'تم إضافة $monthIncExp دج لهذا الشهر'
-              : 'تم سحب $monthIncExp دج لهذا الشهر',
-          style: TextStyle(
-            fontFamily: AppStrings.fontfam,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w400,
-            color: isIncome ? AppColors.forestGreen : AppColors.richRed,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            isIncome
+                ? 'تم إضافة $monthIncExp دج لهذا الشهر'
+                : 'تم سحب $monthIncExp دج لهذا الشهر',
+            style: TextStyle(
+              fontFamily: AppStrings.fontfam,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              color: isIncome ? AppColors.forestGreen : AppColors.richRed,
+            ),
           ),
         ),
       ],

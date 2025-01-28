@@ -54,6 +54,7 @@ class TransactionsRemoteDataSource {
         .collection('transactions')
         .where('type', isEqualTo: transactionType)
         .where('createdAt', isGreaterThanOrEqualTo: lastMonth.toIso8601String())
+        .orderBy('createdAt', descending: true)
         .get();
     return querySnapshot.docs
         .map((doc) => Transactions.fromJson(doc.data()))

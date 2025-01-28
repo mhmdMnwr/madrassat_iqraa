@@ -20,7 +20,7 @@ Widget detailsImage() {
 
 Widget studentDetails() {
   return Padding(
-    padding: EdgeInsets.fromLTRB(30.w, 10.h, 5.w, 21.h),
+    padding: EdgeInsets.fromLTRB(30.w, 10.h, 5.w, 10.h),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -64,7 +64,7 @@ Widget studentDetails() {
 
 Widget studentDetailsInfo({required Student student}) {
   return Padding(
-    padding: EdgeInsets.fromLTRB(30.w, 10.h, 10.w, 21.h),
+    padding: EdgeInsets.fromLTRB(30.w, 10.h, 10.w, 10.h),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

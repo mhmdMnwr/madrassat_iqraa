@@ -13,52 +13,55 @@ class AdminList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          BlocListener<UserCubit, UserState>(
-            listener: (context, state) {
-              if (state is UpdateLoading) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            BlocListener<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UpdateLoading) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Loading...'),
-                    backgroundColor: AppColors.vibrantOrange,
-                  ),
-                );
-              } else if (state is AcceptedUsersLoaded) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Loading...'),
+                      backgroundColor: AppColors.vibrantOrange,
+                    ),
+                  );
+                } else if (state is AcceptedUsersLoaded) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text('successfully updated...'),
-                      backgroundColor: Colors.green),
-                );
-              }
-            },
-            child: ListView.builder(
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text('successfully updated...'),
+                        backgroundColor: Colors.green),
+                  );
+                }
+              },
+              child: ListView.builder(
+                  shrinkWrap:
+                      true, // This makes it take up only as much space as its content
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    return UserListTile(
+                      user: users[index],
+                    );
+                  }),
+            ),
+            ListView.builder(
                 shrinkWrap:
                     true, // This makes it take up only as much space as its content
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: users.length,
+                itemCount: accepted.length,
                 itemBuilder: (context, index) {
-                  return UserListTile(
-                    user: users[index],
+                  return AcceptedUserList(
+                    user: accepted[index],
                   );
                 }),
-          ),
-          ListView.builder(
-              shrinkWrap:
-                  true, // This makes it take up only as much space as its content
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: accepted.length,
-              itemBuilder: (context, index) {
-                return AcceptedUserList(
-                  user: accepted[index],
-                );
-              }),
-        ],
+          ],
+        ),
       ),
     );
   }

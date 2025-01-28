@@ -23,7 +23,7 @@ class _HiTextState extends State<HiText> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 100.h,
+      top: 90.h,
       right: 20.w,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,

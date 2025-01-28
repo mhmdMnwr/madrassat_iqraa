@@ -14,7 +14,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 15.h),
+      padding: EdgeInsets.symmetric(horizontal: 35.w, vertical: 15.h),
       child: ListView.builder(
         itemCount: transactions.length, // Adjust the item count as needed
         itemBuilder: (context, index) {
@@ -43,7 +43,8 @@ class TransactionList extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.fromLTRB(6.w, (index == 0) ? 255.h : 12.h, 6.w, 0),
+        padding:
+            EdgeInsets.fromLTRB(7.w, (index == 0) ? 255.h : 12.h, 10.w, 20.h),
         child: Container(
           height: 100.h,
           width: 400.w,

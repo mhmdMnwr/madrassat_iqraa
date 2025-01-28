@@ -12,7 +12,7 @@ class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 10.h,
+      top: 30.h,
       right: 10.w,
       child: Row(
         children: [

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
+import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/create_update_search_fields.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/mylist.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/stud_teach_app_bar.dart';
+import 'package:madrassat_iqraa/injection.dart';
 
 class SearchPage extends StatefulWidget {
   final bool isTeacher;
@@ -21,35 +24,54 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final TextEditingController _searchController = TextEditingController();
+  late final TextEditingController _searchController;
+  late final String userName;
+  final repository = getIt<UserRepository>();
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    context.read<UserCubit>().getUserById();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<StudentCubit, StudentState>(
-      listener: (context, state) {
-        if (state is StudentOperationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('تمت العملية بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        } else if (state is StudentError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
-          );
-        } else if (state is StudentLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('جاري المعالجة...'),
-              backgroundColor: AppColors.vibrantOrange,
-            ),
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<StudentCubit, StudentState>(
+          listener: (context, state) {
+            if (state is StudentOperationSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('تمت العملية بنجاح'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            } else if (state is StudentError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else if (state is StudentLoading) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('جاري المعالجة...'),
+                  backgroundColor: AppColors.vibrantOrange,
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<UserCubit, UserState>(
+          listener: (context, state) {
+            if (state is MeUserLoaded) {
+              userName = state.user.userName;
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: StudTeachAppBar(
           context: context,
@@ -100,6 +122,7 @@ class _SearchPageState extends State<SearchPage> {
             );
           }
           return MyList(
+            userName: userName,
             previousContext: context,
             students: state.students,
             isteacher: widget.isTeacher,

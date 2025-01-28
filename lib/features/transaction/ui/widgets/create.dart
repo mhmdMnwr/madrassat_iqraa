@@ -42,6 +42,9 @@ Future<void> showAddTransactionDialog({
                   if (int.tryParse(value) == null) {
                     return 'يرجى إدخال قيمة رقمية';
                   }
+                  if (value.length > 7) {
+                    return 'القيمة المدخلة كبيرة جدا';
+                  }
                   return null;
                 }),
                 SizedBox(

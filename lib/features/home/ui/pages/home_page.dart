@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
         body: Stack(
           children: [
             Container(color: AppColors.background),
-            curvedAppBar(269),
+            curvedAppBar(250),
             const Logo(),
             HiText(),
             BlocProvider(
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Column(
               children: [
-                SizedBox(height: 350.h),
+                SizedBox(height: 310.h),
                 Expanded(child: categories(admin: admin)),
               ],
             ),

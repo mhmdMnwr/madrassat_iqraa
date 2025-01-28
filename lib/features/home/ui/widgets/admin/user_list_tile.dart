@@ -20,8 +20,8 @@ class _UserListTileState extends State<UserListTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100.h,
-      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 15.h),
+      height: 70.h,
+      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 17.h),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: AppColors.vibrantOrange, width: 3.5.sp),
@@ -64,8 +64,8 @@ class _UserListTileState extends State<UserListTile> {
                   opacity: disable ? 0.5 : 1,
                   child: Image.asset(
                     AppIcons.adminreject,
-                    height: 60.h,
-                    width: 60.w,
+                    height: 40.h,
+                    width: 40.w,
                   ),
                 ),
               ),
@@ -89,8 +89,8 @@ class _UserListTileState extends State<UserListTile> {
                   opacity: disable ? 0.5 : 1,
                   child: Image.asset(
                     AppIcons.adminaccept,
-                    height: 60.h,
-                    width: 60.w,
+                    height: 40.h,
+                    width: 40.w,
                   ),
                 ),
               ),

@@ -15,7 +15,7 @@ class UserInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: !isteacher ? 100.h : 120.h,
-      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
+      margin: EdgeInsets.fromLTRB(6.w, 5.h, 6.w, 25.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.sp),
@@ -53,25 +53,34 @@ class UserInfoCard extends StatelessWidget {
                   ),
 
                   // Registration Date
-                  Text(
-                    !isteacher
-                        ? student.sex
-                        : "المبلغ المستحق: ${student.money} دج",
-                    style: AppTextStyle.text,
-                    textAlign: TextAlign.right,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      !isteacher
+                          ? student.sex
+                          : "المبلغ المستحق: ${student.money} دج",
+                      style: AppTextStyle.text,
+                      textAlign: TextAlign.right,
+                    ),
                   ),
 
                   // ID
-                  Text(
-                    "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}",
-                    style: AppTextStyle.text,
-                    textAlign: TextAlign.right,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      "تاريخ الميلاد: ${student.birthDate.substring(0, 10).replaceAll('-', '/')}",
+                      style: AppTextStyle.text,
+                      textAlign: TextAlign.right,
+                    ),
                   ),
                   if (isteacher)
-                    Text(
-                      "تاريخ الإنضمام: ${student.payDay.substring(0, 10).replaceAll('-', '/')}",
-                      style: AppTextStyle.bluetext,
-                      textAlign: TextAlign.right,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "تاريخ الإنضمام: ${student.payDay.substring(0, 10).replaceAll('-', '/')}",
+                        style: AppTextStyle.bluetext,
+                        textAlign: TextAlign.right,
+                      ),
                     ),
                 ],
               ),

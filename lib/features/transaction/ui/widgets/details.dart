@@ -31,30 +31,30 @@ class DetailsPopup extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "تفاصيل العملية",
+                  transaction.type ? 'تفاصيل التبرع' : 'تفاصيل السحب',
                   textAlign: TextAlign.center,
                   style: AppTextStyle.mains,
                 ),
               ),
               SizedBox(height: 20.h),
-              _info2(
+              _info(
                   icon: AppIcons.logo,
                   title: "اسم المستخدم",
                   value: transaction.userName),
               SizedBox(height: 16.h),
-              _info2(
+              _info(
                   icon: AppIcons.minusmoney,
                   title: "المبلغ",
                   value: transaction.amount.toString()),
               SizedBox(height: 16.h),
-              _info2(
+              _info(
                 icon: AppIcons.calendar,
                 title: "التاريخ",
                 value:
                     '${transaction.createdAt.day}/${transaction.createdAt.month}/${transaction.createdAt.year}',
               ),
               SizedBox(height: 16.h),
-              _info2(
+              _info(
                 icon: AppIcons.clock,
                 title: "الوقت",
                 value:
@@ -123,33 +123,6 @@ class DetailsPopup extends StatelessWidget {
   }
 
   Widget _info({
-    required String title,
-    required String value,
-    required IconData icon,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontFamily: AppStrings.fontfam,
-            fontSize: 20.sp,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(
-          width: 20.w,
-        ),
-        Text(':$title', style: AppTextStyle.subTitles),
-        SizedBox(width: 8.w),
-        Icon(icon, color: AppColors.shadowBlue, size: 30.sp),
-      ],
-    );
-  }
-
-  Widget _info2({
     required String title,
     required String value,
     required String icon,

@@ -5,15 +5,21 @@ import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
+import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
+import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/mylist.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/pop_up_create.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/stud_teach_app_bar.dart';
+import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
+import 'package:madrassat_iqraa/features/transaction/ui/bloc/cubit/transactions_cubit.dart';
+import 'package:madrassat_iqraa/injection.dart';
 
 class StudentsTeachersPage extends StatefulWidget {
+  final repository = getIt<UserRepository>();
   final bool isteacher;
-  const StudentsTeachersPage({super.key, required this.isteacher});
+  StudentsTeachersPage({super.key, required this.isteacher});
 
   @override
   State<StudentsTeachersPage> createState() => _StudentsTeachersPageState();
@@ -25,6 +31,8 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
   late final TextEditingController sexController;
   late final TextEditingController priceController;
   late final TextEditingController payDayController;
+  String userName = '';
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +41,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
     sexController = TextEditingController();
     priceController = TextEditingController();
     payDayController = TextEditingController();
+    context.read<UserCubit>().getUserById();
     context.read<StudentCubit>().loadStudents(isteacher: widget.isteacher);
   }
 
@@ -48,66 +57,75 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<StudentCubit, StudentState>(
-      listener: (context, state) {
-        if (state is StudentPayed) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('تمت العملية بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
-
-          if (!widget.isteacher) {
-            context.read<AdminCubit>().addFunds(amount: 800);
-          }
-        } else if (state is StudentUpdated) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('تم التعديل بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        } else if (state is StudentAdded) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('تمت الإضافة بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          if (widget.isteacher) {
-            context.read<AdminCubit>().addTeacher();
-          } else {
-            context.read<AdminCubit>().addStudent();
-          }
-        } else if (state is StudentDeleted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('تم الحذف بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          if (widget.isteacher) {
-            context.read<AdminCubit>().removeTeacher();
-          } else {
-            context.read<AdminCubit>().removeStudent();
-          }
-        } else if (state is StudentError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
-          );
-        } else if (state is StudentLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('جاري المعالجة...'),
-              backgroundColor: AppColors.vibrantOrange,
-            ),
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<StudentCubit, StudentState>(
+          listener: (context, state) {
+            if (state is StudentPayed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('تمت العملية بنجاح'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            } else if (state is StudentUpdated) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('تم التعديل بنجاح'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            } else if (state is StudentAdded) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('تمت الإضافة بنجاح'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              if (widget.isteacher) {
+                context.read<AdminCubit>().addTeacher();
+              } else {
+                context.read<AdminCubit>().addStudent();
+              }
+            } else if (state is StudentDeleted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('تم الحذف بنجاح'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              if (widget.isteacher) {
+                context.read<AdminCubit>().removeTeacher();
+              } else {
+                context.read<AdminCubit>().removeStudent();
+              }
+            } else if (state is StudentError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            } else if (state is StudentLoading) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('جاري المعالجة...'),
+                  backgroundColor: AppColors.vibrantOrange,
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<UserCubit, UserState>(
+          listener: (context, state) {
+            if (state is MeUserLoaded) {
+              setState(() {
+                userName = state.user.userName;
+              });
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: StudTeachAppBar(
           search: true,
@@ -164,6 +182,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
           return Center(child: CircularProgressIndicator());
         } else if (state is StudentLoaded) {
           return MyList(
+            userName: userName,
             previousContext: context,
             students: state.students,
             isteacher: widget.isteacher,

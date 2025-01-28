@@ -24,10 +24,10 @@ class payedMonthList extends StatelessWidget {
 
 Widget monthList({required int index, required DateTime date}) {
   return Padding(
-    padding: EdgeInsets.fromLTRB(6.w, (index == 0) ? 255.h : 12.h, 6.w, 0),
+    padding: EdgeInsets.fromLTRB(25.w, (index == 0) ? 255.h : 25.h, 25.w, 0),
     child: Container(
-      height: 100.h,
-      width: 400.w,
+      height: 80.h,
+      width: 370.w,
       decoration: border(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,9 +74,9 @@ Widget _moneyRow({
   return Padding(
     padding: EdgeInsets.only(
       left: 25.w,
-      top: 50.h,
+      top: 15.h,
     ),
-    child: Row(children: [
+    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Text("800 دج",
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,

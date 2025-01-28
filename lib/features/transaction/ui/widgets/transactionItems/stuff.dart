@@ -27,7 +27,7 @@ BoxDecoration border() {
 Widget infoColumn({required Transactions transaction}) {
   return Padding(
     padding: EdgeInsets.only(
-      left: 30.w,
+      left: 22.w,
       bottom: 5.h,
     ),
     child: Padding(
@@ -83,18 +83,21 @@ Widget timeRow({required String time, required String icon}) {
 Widget moneyRow({required bool isIncome, required Transactions transaction}) {
   return Padding(
     padding: EdgeInsets.only(
-      left: 25.w,
+      left: 20.w,
       top: 50.h,
     ),
     child: Row(children: [
-      Text("${transaction.amount} دج",
-          textDirection: TextDirection.rtl,
-          textAlign: TextAlign.right,
-          style: TextStyle(
-              fontFamily: AppStrings.fontfam,
-              fontWeight: FontWeight.w700,
-              color: isIncome ? AppColors.forestGreen : AppColors.richRed,
-              fontSize: 22.sp)),
+      FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text("${transaction.amount} دج",
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.right,
+            style: TextStyle(
+                fontFamily: AppStrings.fontfam,
+                fontWeight: FontWeight.w700,
+                color: isIncome ? AppColors.forestGreen : AppColors.richRed,
+                fontSize: 22.sp)),
+      ),
       SizedBox(
         width: 6.w,
       ),

@@ -67,7 +67,7 @@ class _DetailPageState extends State<DetailPage> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30.w),
         child: Container(
-            height: 150.h,
+            height: 130.h,
             width: 350.w,
             decoration: border(),
             child: Row(

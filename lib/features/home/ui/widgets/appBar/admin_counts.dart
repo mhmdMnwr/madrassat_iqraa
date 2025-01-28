@@ -46,9 +46,9 @@ Widget builder({
   SchoolState? schoolState,
 }) {
   return Positioned(
-    top: 219.h,
-    left: 30.w,
-    right: 30.w,
+    top: 180.h,
+    left: 45.w,
+    right: 45.w,
     height: 115.h,
     child: Container(
       padding: EdgeInsets.fromLTRB(3.w, 14.h, 3.w, 14.h),
@@ -109,8 +109,8 @@ Widget numHolder({
   required String text2,
 }) {
   return SizedBox(
-    width: 110.w,
-    height: 100.h,
+    width: 90.w,
+    height: 90.h,
     child: Column(
       children: [
         SizedBox(
@@ -119,22 +119,27 @@ Widget numHolder({
         Text(
           text2,
           style: TextStyle(
-              fontFamily: AppStrings.fontfam,
-              fontWeight: FontWeight.w600,
-              fontSize: 20.sp,
-              color: AppColors.shadowBlue),
+            fontFamily: AppStrings.fontfam,
+            fontWeight: FontWeight.w600,
+            fontSize: 20.sp,
+            color: AppColors.shadowBlue,
+          ),
         ),
         SizedBox(
           height: 10.h,
         ),
-        Text(
-          !da ? text.toString() : "${text.toString()} دج",
-          textDirection: TextDirection.rtl,
-          style: TextStyle(
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            !da ? text.toString() : "${text.toString()} دج",
+            textDirection: TextDirection.rtl,
+            style: TextStyle(
               fontFamily: AppStrings.fontfam,
               fontWeight: FontWeight.w500,
-              fontSize: (da && text.toString().length > 5) ? 20.sp : 23.sp,
-              color: AppColors.skyBlue),
+              fontSize: 23.sp,
+              color: AppColors.skyBlue,
+            ),
+          ),
         ),
       ],
     ),

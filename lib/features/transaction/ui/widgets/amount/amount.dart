@@ -9,12 +9,12 @@ Widget amount({
   required VoidCallback? addTransaction,
 }) {
   return Positioned(
-    top: 90.h,
+    top: 110.h,
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.symmetric(horizontal: 40.w),
       child: Container(
-          height: 150.h,
-          width: 350.w,
+          height: 130.h,
+          width: 330.w,
           decoration: border(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

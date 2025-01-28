@@ -41,8 +41,8 @@ Widget gridsComponent({required String text, required String imagePath}) {
     children: [
       Center(
         child: SizedBox(
-          height: 80.h,
-          width: 80.w,
+          height: 75.h,
+          width: 75.w,
           child: Image.asset(
             imagePath,
           ),

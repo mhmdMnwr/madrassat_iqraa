@@ -9,15 +9,19 @@ import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/detail.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/info.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/pop_up_create.dart';
+import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
+import 'package:madrassat_iqraa/features/transaction/ui/bloc/cubit/transactions_cubit.dart';
 import 'package:madrassat_iqraa/injection.dart';
 
 class MyList extends StatefulWidget {
   final List<Student> students;
   final bool isteacher;
+  final String userName;
   final BuildContext previousContext;
 
   const MyList(
       {super.key,
+      required this.userName,
       required this.students,
       required this.isteacher,
       required this.previousContext});
@@ -32,6 +36,7 @@ class _MyListState extends State<MyList> {
   late final TextEditingController sexController;
   late final TextEditingController priceController;
   late final TextEditingController payDayController;
+
   @override
   void initState() {
     super.initState();
@@ -54,29 +59,35 @@ class _MyListState extends State<MyList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.students.length,
-      itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () => _showOptionsPopup(
-              context, widget.students[index], widget.isteacher),
-          child: UserInfoCard(
-            isteacher: widget.isteacher,
-            student: widget.students[index],
-          ),
-        );
-      },
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 20.w),
+      child: ListView.builder(
+        itemCount: widget.students.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () => _showOptionsPopup(
+                context, widget.students[index], widget.isteacher),
+            child: UserInfoCard(
+              isteacher: widget.isteacher,
+              student: widget.students[index],
+            ),
+          );
+        },
+      ),
     );
   }
 
   void _showOptionsPopup(
-      BuildContext context, Student student, bool isTeacher) {
+    BuildContext context,
+    Student student,
+    bool isTeacher,
+  ) {
     String label1 = widget.isteacher ? 'دفع مستحقات' : 'تسجيل متبرع';
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.all(10.sp),
+          padding: EdgeInsets.only(bottom: 20.h),
           child: Directionality(
             textDirection: TextDirection.rtl, // Right to left text direction
             child: Column(
@@ -85,7 +96,13 @@ class _MyListState extends State<MyList> {
                 //! daf3 mousta7a9at button
                 myListTile(Icons.payment, label1, () {
                   if (!isTeacher && !student.payed) {
+                    Transactions transaction = Transactions(
+                        type: false,
+                        userName: widget.userName,
+                        amount: student.money,
+                        description: 'تبرع الطالب ${student.name}');
                     PayedMonths date = PayedMonths(studentId: student.id);
+
                     Student payedStudent = student.copyWith(payed: true);
                     widget.previousContext
                         .read<StudentCubit>()
@@ -94,7 +111,15 @@ class _MyListState extends State<MyList> {
                     widget.previousContext.read<StudentCubit>().updatePayed(
                         student.id, payedStudent,
                         isTeacher: isTeacher);
+                    widget.previousContext
+                        .read<TransactionsCubit>()
+                        .createTransaction(transaction);
                   } else if (isTeacher) {
+                    Transactions transaction = Transactions(
+                        type: false,
+                        userName: widget.userName,
+                        amount: student.money,
+                        description: 'تم دفع مستحقات الاستاذ ${student.name}');
                     Student payedStudent = student.copyWith(payed: true);
                     widget.previousContext.read<StudentCubit>().updatePayed(
                         student.id, payedStudent,
@@ -102,6 +127,9 @@ class _MyListState extends State<MyList> {
                     widget.previousContext
                         .read<AdminCubit>()
                         .removeFunds(amount: payedStudent.money);
+                    widget.previousContext
+                        .read<TransactionsCubit>()
+                        .createTransaction(transaction);
                   }
                 }),
 

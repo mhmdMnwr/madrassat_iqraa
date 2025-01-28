@@ -39,48 +39,55 @@ class _IncomeExpensePageState extends State<IncomeExpensePage> {
   int totalFund = 0;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AdminCubit, AdminState>(
-      listener: (context, state) {
-        if (state is AdminLoaded) {
-          totalFund = state.schoolState?.totalFunds ?? 0;
-        }
-      },
-      child: BlocListener<TransactionsCubit, TransactionsState>(
-        listener: (context, state) {
-          if (state is TransactionCreated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('تمت العملية بنجاح'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            if (widget.isIncome) {
-              context
-                  .read<AdminCubit>()
-                  .addFunds(amount: int.parse(amountController.text));
-            } else {
-              context
-                  .read<AdminCubit>()
-                  .removeFunds(amount: int.parse(amountController.text));
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AdminCubit, AdminState>(
+          listener: (context, state) {
+            if (state is AdminLoaded) {
+              setState(() {
+                totalFund = state.schoolState?.totalFunds ?? 0;
+              });
             }
-            context
-                .read<TransactionsCubit>()
-                .fetchLastMonthByType(widget.isIncome);
-          }
-        },
-        child: Scaffold(
-          body: Stack(
-            children: [
-              Container(color: AppColors.background),
-              _buildBloc(),
-              curvedAppBar(200),
-              backIcons(
-                context: context,
-                isIncome: widget.isIncome,
-              ),
-              _buildblocAmount(),
-            ],
-          ),
+          },
+        ),
+        BlocListener<TransactionsCubit, TransactionsState>(
+          listener: (context, state) {
+            if (state is TransactionCreated) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('تمت العملية بنجاح'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              if (widget.isIncome) {
+                context
+                    .read<AdminCubit>()
+                    .addFunds(amount: int.parse(amountController.text));
+              } else {
+                context
+                    .read<AdminCubit>()
+                    .removeFunds(amount: int.parse(amountController.text));
+              }
+
+              context
+                  .read<TransactionsCubit>()
+                  .fetchLastMonthByType(widget.isIncome);
+            }
+          },
+        )
+      ],
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(color: AppColors.background),
+            _buildBloc(),
+            curvedAppBar(200),
+            backIcons(
+              context: context,
+              isIncome: widget.isIncome,
+            ),
+            _buildblocAmount(),
+          ],
         ),
       ),
     );
@@ -102,6 +109,7 @@ class _IncomeExpensePageState extends State<IncomeExpensePage> {
               isIncome: widget.isIncome,
               addTransaction: () {});
         } else if (state is TransactionsLoaded) {
+          context.read<AdminCubit>().getAdminData();
           return amount(
             monthIncExp: calculateLastMonthFunds(state.transactions),
             addTransaction: () {

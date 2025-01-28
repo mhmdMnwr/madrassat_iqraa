@@ -50,16 +50,30 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: '/searchTeatcher',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<StudentCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<StudentCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
+                ),
+              ],
               child: SearchPage(
                 isTeacher: true,
               ),
             )),
     GoRoute(
         path: '/searchStudent',
-        builder: (context, state) => BlocProvider(
-              create: (context) => getIt<StudentCubit>(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<StudentCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
+                ),
+              ],
               child: SearchPage(
                 isTeacher: false,
               ),
@@ -69,7 +83,13 @@ final GoRouter router = GoRouter(
         builder: (context, state) => MultiBlocProvider(
               providers: [
                 BlocProvider(
+                  create: (context) => getIt<TransactionsCubit>(),
+                ),
+                BlocProvider(
                   create: (context) => getIt<StudentCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
                 ),
                 BlocProvider(
                   create: (context) => getIt<AdminCubit>(),
@@ -85,6 +105,12 @@ final GoRouter router = GoRouter(
               providers: [
                 BlocProvider(
                   create: (context) => getIt<StudentCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<TransactionsCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<UserCubit>(),
                 ),
                 BlocProvider(
                   create: (context) => getIt<AdminCubit>(),

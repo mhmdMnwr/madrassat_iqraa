@@ -5,15 +5,15 @@ import 'package:madrassat_iqraa/features/home/ui/widgets/body/grid_component.dar
 
 Widget categories({required bool admin}) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 30.w),
+    padding: EdgeInsets.symmetric(horizontal: 45.w),
     child: LayoutBuilder(
       builder: (context, constraints) {
         return GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Number of columns
-            crossAxisSpacing: 22.w, // Spacing between columns
-            mainAxisSpacing: 22.w, // Spacing between rows
+            crossAxisSpacing: 15.w, // Spacing between columns
+            mainAxisSpacing: 15.w, // Spacing between rows
             childAspectRatio: 1.11.sp, // Adjust the aspect ratio as needed
           ),
           itemCount: admin ? 6 : 5,

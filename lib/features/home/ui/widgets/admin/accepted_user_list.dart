@@ -18,8 +18,8 @@ class _AcceptedUserListState extends State<AcceptedUserList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100.h,
-      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 15.h),
+      height: 75.h,
+      margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 17.h),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: AppColors.vibrantOrange, width: 3.5.sp),
@@ -53,6 +53,8 @@ class _AcceptedUserListState extends State<AcceptedUserList> {
           Padding(
             padding: EdgeInsets.only(right: 15.w),
             child: Container(
+              height: 40.h,
+              width: 40.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 boxShadow: [
@@ -76,7 +78,11 @@ class _AcceptedUserListState extends State<AcceptedUserList> {
                   ),
                   padding: EdgeInsets.all(10.sp),
                 ),
-                child: Image.asset(AppIcons.adminaccept),
+                child: Image.asset(
+                  AppIcons.adminaccept,
+                  width: 40.w,
+                  height: 40.h,
+                ),
               ),
             ),
           )
