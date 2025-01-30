@@ -12,8 +12,6 @@ import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/mylist.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/pop_up_create.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/stud_teach_app_bar.dart';
-import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
-import 'package:madrassat_iqraa/features/transaction/ui/bloc/cubit/transactions_cubit.dart';
 import 'package:madrassat_iqraa/injection.dart';
 
 class StudentsTeachersPage extends StatefulWidget {

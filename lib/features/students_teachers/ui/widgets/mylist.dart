@@ -85,7 +85,7 @@ class _MyListState extends State<MyList> {
     String label1 = widget.isteacher ? 'دفع مستحقات' : 'تسجيل متبرع';
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext popUpContext) {
         return Padding(
           padding: EdgeInsets.only(bottom: 20.h),
           child: Directionality(
@@ -97,9 +97,9 @@ class _MyListState extends State<MyList> {
                 myListTile(Icons.payment, label1, () {
                   if (!isTeacher && !student.payed) {
                     Transactions transaction = Transactions(
-                        type: false,
+                        type: true,
                         userName: widget.userName,
-                        amount: student.money,
+                        amount: 800,
                         description: 'تبرع الطالب ${student.name}');
                     PayedMonths date = PayedMonths(studentId: student.id);
 
@@ -114,6 +114,10 @@ class _MyListState extends State<MyList> {
                     widget.previousContext
                         .read<TransactionsCubit>()
                         .createTransaction(transaction);
+                    widget.previousContext
+                        .read<AdminCubit>()
+                        .addFunds(amount: 800);
+                    Navigator.of(popUpContext).pop();
                   } else if (isTeacher) {
                     Transactions transaction = Transactions(
                         type: false,
@@ -130,6 +134,7 @@ class _MyListState extends State<MyList> {
                     widget.previousContext
                         .read<TransactionsCubit>()
                         .createTransaction(transaction);
+                    Navigator.of(popUpContext).pop();
                   }
                 }),
 
@@ -171,6 +176,7 @@ class _MyListState extends State<MyList> {
                   widget.previousContext
                       .read<StudentCubit>()
                       .deleteStudent(student.id, isTeacher: isTeacher);
+                  Navigator.of(popUpContext).pop();
                 }),
               ],
             ),
