@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/curved_appbar.dart';
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
@@ -53,6 +54,7 @@ class _DetailPageState extends State<DetailPage> {
             dates: state.dates,
           );
         } else if (state is PayedMonthError) {
+          MySnackBars.failure(message: state.message, context: context);
           return Center(child: Text(state.message));
         } else {
           return Container();

@@ -20,6 +20,15 @@ class TransactionsLoaded extends TransactionsState {
   List<Object> get props => [transactions];
 }
 
+class TransactionsLoadingMore extends TransactionsState {
+  final List<Transactions> transactions;
+
+  const TransactionsLoadingMore({required this.transactions});
+
+  @override
+  List<Object> get props => [transactions];
+}
+
 class TransactionsError extends TransactionsState {
   final String message;
 

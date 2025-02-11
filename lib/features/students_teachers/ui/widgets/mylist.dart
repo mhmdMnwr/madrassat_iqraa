@@ -60,7 +60,7 @@ class _MyListState extends State<MyList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 20.w),
+      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 13.w),
       child: ListView.builder(
         itemCount: widget.students.length,
         itemBuilder: (context, index) {
@@ -87,7 +87,7 @@ class _MyListState extends State<MyList> {
       context: context,
       builder: (BuildContext popUpContext) {
         return Padding(
-          padding: EdgeInsets.only(bottom: 20.h),
+          padding: EdgeInsets.only(bottom: 14.h),
           child: Directionality(
             textDirection: TextDirection.rtl, // Right to left text direction
             child: Column(

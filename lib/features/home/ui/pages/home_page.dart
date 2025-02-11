@@ -5,6 +5,7 @@ import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/admin/strings.dart';
 import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/admin_counts.dart';
@@ -50,12 +51,7 @@ class _HomePageState extends State<HomePage> {
       listener: (context, state) {
         if (state is LogOut) {
           navigateToPage(context, 'LogIn');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Logged out successfully'),
-              backgroundColor: Colors.red,
-            ),
-          );
+          MySnackBars.success(message: 'تمت العملية بنجاح', context: context);
         }
       },
       child: Scaffold(

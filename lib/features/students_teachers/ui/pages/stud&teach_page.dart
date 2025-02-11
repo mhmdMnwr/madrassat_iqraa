@@ -5,6 +5,7 @@ import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
@@ -60,38 +61,21 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
         BlocListener<StudentCubit, StudentState>(
           listener: (context, state) {
             if (state is StudentPayed) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('تمت العملية بنجاح'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              MySnackBars.success(
+                  message: 'تمت العملية بنجاح', context: context);
             } else if (state is StudentUpdated) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('تم التعديل بنجاح'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              MySnackBars.success(
+                  message: 'تم التعديل بنجاح', context: context);
             } else if (state is StudentAdded) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('تمت الإضافة بنجاح'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              MySnackBars.success(
+                  message: 'تمت الإضافة بنجاح', context: context);
               if (widget.isteacher) {
                 context.read<AdminCubit>().addTeacher();
               } else {
                 context.read<AdminCubit>().addStudent();
               }
             } else if (state is StudentDeleted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('تم الحذف بنجاح'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              MySnackBars.failure(message: "تم حذف الطالب", context: context);
               if (widget.isteacher) {
                 context.read<AdminCubit>().removeTeacher();
               } else {
@@ -105,12 +89,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
                 ),
               );
             } else if (state is StudentLoading) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('جاري المعالجة...'),
-                  backgroundColor: AppColors.vibrantOrange,
-                ),
-              );
+              MySnackBars.loading(message: 'يرجى الانتظار', context: context);
             }
           },
         ),
@@ -127,6 +106,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
       child: Scaffold(
         appBar: StudTeachAppBar(
           search: true,
+          isteacher: widget.isteacher,
           context: context,
           title: !widget.isteacher
               ? AppPagesNames.studentsList
@@ -179,14 +159,26 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
         if (state is StudentLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is StudentLoaded) {
-          return MyList(
-            userName: userName,
-            previousContext: context,
-            students: state.students,
-            isteacher: widget.isteacher,
-          );
+          if (state.students.isEmpty) {
+            return const Center(
+              child: Text(
+                'لا توجد نتائج',
+                style: TextStyle(
+                  fontFamily: AppStrings.fontfam,
+                  fontSize: 18,
+                ),
+              ),
+            );
+          } else {
+            return MyList(
+              userName: userName,
+              previousContext: context,
+              students: state.students,
+              isteacher: widget.isteacher,
+            );
+          }
         } else if (state is StudentError) {
-          return Text(state.message);
+          return Center(child: Text(state.message));
         } else {
           return Container(
             color: Colors.red,

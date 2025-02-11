@@ -5,6 +5,7 @@ import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/admin/model/admin_model.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 
 class AdminCounts extends StatefulWidget {
   @override
@@ -23,12 +24,17 @@ class _AdminCountsState extends State<AdminCounts> {
     return BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
       if (state is AdminLoading) {
         return builder(
+          circle: true,
           error: true,
         );
       } else if (state is AdminLoaded) {
         return builder(schoolState: state.schoolState);
       } else if (state is AdminError) {
-        return builder(error: true, message: state.message);
+        MySnackBars.failure(message: state.message, context: context);
+
+        return builder(
+          error: true,
+        );
       } else {
         return Center(
           child: Container(
@@ -41,6 +47,7 @@ class _AdminCountsState extends State<AdminCounts> {
 }
 
 Widget builder({
+  bool circle = false,
   bool error = false,
   String message = "-----",
   SchoolState? schoolState,
@@ -75,6 +82,7 @@ Widget builder({
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           numHolder(
+            circle: circle,
             text: error ? message : schoolState?.teacherCount,
             text2: "عدد المعلمين",
           ),
@@ -84,6 +92,7 @@ Widget builder({
             width: 5.w,
           ),
           numHolder(
+            circle: circle,
             da: true,
             text: error ? message : schoolState?.totalFunds,
             text2: "مبلغ الميزانية",
@@ -94,6 +103,7 @@ Widget builder({
             width: 5.w,
           ),
           numHolder(
+            circle: circle,
             text: error ? message : schoolState?.studentCount,
             text2: "عدد الطلاب",
           ),
@@ -104,6 +114,7 @@ Widget builder({
 }
 
 Widget numHolder({
+  bool circle = false,
   bool da = false,
   required dynamic text,
   required String text2,
@@ -128,19 +139,23 @@ Widget numHolder({
         SizedBox(
           height: 10.h,
         ),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            !da ? text.toString() : "${text.toString()} دج",
-            textDirection: TextDirection.rtl,
-            style: TextStyle(
-              fontFamily: AppStrings.fontfam,
-              fontWeight: FontWeight.w500,
-              fontSize: 23.sp,
-              color: AppColors.skyBlue,
-            ),
-          ),
-        ),
+        circle
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  !da ? text.toString() : "${text.toString()} دج",
+                  textDirection: TextDirection.rtl,
+                  style: TextStyle(
+                    fontFamily: AppStrings.fontfam,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 23.sp,
+                    color: AppColors.skyBlue,
+                  ),
+                ),
+              ),
       ],
     ),
   );

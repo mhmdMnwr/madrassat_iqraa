@@ -18,38 +18,60 @@ class TransactionsRepository {
     return await _connectionChecker.hasConnection;
   }
 
-  //!getAllTransactions
-  Future<Either<String, List<Transactions>>> getAllTransactions() async {
+  //! Get All Transactions (Paginated)
+  Future<Either<String, List<Transactions>>> getAllTransactions(
+      {int page = 1, bool isRefresh = false}) async {
     if (await _hasConnection()) {
-      final transactions = await _dataSource.getAllTransactions();
+      final transactions = await _dataSource.getAllTransactions(
+          isRefresh: isRefresh, page: page);
       return Right(transactions);
     } else {
       return Left(noConnctionError);
     }
   }
 
-//!getLastMonthTransactions
-  Future<Either<String, List<Transactions>>> getLastMonthTransactions() async {
+  //!get by date paginated
+
+  Future<Either<String, List<Transactions>>> getTransactionsByDay({
+    required DateTime date,
+    bool isRefresh = false,
+  }) async {
     if (await _hasConnection()) {
-      final transactions = await _dataSource.getLastMonthTransactions();
+      try {
+        final transactions = await _dataSource.getTransactionsByDay(
+          date: date,
+          isRefresh: isRefresh,
+        );
+        return Right(transactions);
+      } catch (e) {
+        return Left("Failed to fetch transactions: ${e.toString()}");
+      }
+    } else {
+      return Left(noConnctionError);
+    }
+  }
+
+  // //! Get Last Month Transactions by Type (Paginated)
+  // Future<Either<String, List<Transactions>>> getLastMonthByType(bool transactionType, {bool isRefresh = false}) async {
+  //   if (await _hasConnection()) {
+  //     final transactions = await _dataSource.getLastMonthByType(transactionType, isRefresh: isRefresh);
+  //     return Right(transactions);
+  //   } else {
+  //     return Left(noConnctionError);
+  //   }
+  // }
+
+  //! Get Transactions by User (All, No Pagination)
+  Future<Either<String, List<Transactions>>> getByUser(String userId) async {
+    if (await _hasConnection()) {
+      final transactions = await _dataSource.getByUser(userId);
       return Right(transactions);
     } else {
       return Left(noConnctionError);
     }
   }
 
-//!getLastMonthByUser
-  Future<Either<String, List<Transactions>>> getLastMonthByUser(
-      String userId) async {
-    if (await _hasConnection()) {
-      final transactions = await _dataSource.getLastMonthByUser(userId);
-      return Right(transactions);
-    } else {
-      return Left(noConnctionError);
-    }
-  }
-
-//!getLastMonthByType
+  //!getLastMonthByType
   Future<Either<String, List<Transactions>>> getLastMonthByType(
       bool transactionType) async {
     if (await _hasConnection()) {
@@ -61,28 +83,7 @@ class TransactionsRepository {
     }
   }
 
-//!getByUser
-  Future<Either<String, List<Transactions>>> getByUser(String userId) async {
-    if (await _hasConnection()) {
-      final transactions = await _dataSource.getByUser(userId);
-      return Right(transactions);
-    } else {
-      return Left(noConnctionError);
-    }
-  }
-
-//!getByType
-  Future<Either<String, List<Transactions>>> getByType(
-      bool transactionType) async {
-    if (await _hasConnection()) {
-      final transactions = await _dataSource.getByType(transactionType);
-      return Right(transactions);
-    } else {
-      return Left(noConnctionError);
-    }
-  }
-
-//!createTransaction
+  //! Create Transaction
   Future<Either<String, void>> createTransaction(
       Transactions transaction) async {
     if (await _hasConnection()) {
@@ -91,5 +92,10 @@ class TransactionsRepository {
     } else {
       return Left(noConnctionError);
     }
+  }
+
+  //! Reset Pagination (Optional: Use this when refreshing the data)
+  void resetPagination() {
+    _dataSource.resetPagination();
   }
 }

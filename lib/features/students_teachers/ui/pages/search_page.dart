@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:madrassat_iqraa/core/string.dart';
-import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
@@ -41,26 +41,12 @@ class _SearchPageState extends State<SearchPage> {
         BlocListener<StudentCubit, StudentState>(
           listener: (context, state) {
             if (state is StudentOperationSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('تمت العملية بنجاح'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              MySnackBars.success(
+                  message: 'تمت العملية بنجاح', context: context);
             } else if (state is StudentError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              MySnackBars.failure(message: state.message, context: context);
             } else if (state is StudentLoading) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('جاري المعالجة...'),
-                  backgroundColor: AppColors.vibrantOrange,
-                ),
-              );
+              MySnackBars.loading(message: 'يرجى الانتظار', context: context);
             }
           },
         ),
@@ -132,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
             child: Text(
               'خطأ: ${state.message}',
               style: const TextStyle(
-                fontFamily: 'Tajawal',
+                fontFamily: AppStrings.fontfam,
                 fontSize: 16,
                 color: Colors.red,
               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:madrassat_iqraa/core/string.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/admin/list_items.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
@@ -26,19 +28,11 @@ class _AdminState extends State<Admin> {
     return BlocListener<StudentCubit, StudentState>(
       listener: (context, state) {
         if (state is StudentOperationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('تمت العملية بنجاح'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          MySnackBars.success(message: 'تمت العملية بنجاح', context: context);
         } else if (state is StudentError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
-          );
+          MySnackBars.failure(message: state.message, context: context);
+        } else if (state is StudentLoading) {
+          MySnackBars.loading(message: 'يرجى الانتظار', context: context);
         }
       },
       child: Scaffold(
@@ -73,6 +67,8 @@ class _AdminState extends State<Admin> {
           return AdminList(
               users: state.updatedUsers, accepted: state.acceptedUsers);
         } else if (state is UserError) {
+          MySnackBars.failure(message: state.message, context: context);
+
           return Center(
             child: Text(
               state.message,
@@ -84,10 +80,8 @@ class _AdminState extends State<Admin> {
 
         // Fallback UI (safe placeholder)
         return Center(
-          child: Text(
-            'No data available',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          ),
+          child: Text('لا توجد معلومات',
+              style: TextStyle(color: Colors.grey, fontSize: 16.sp)),
         );
       },
     );

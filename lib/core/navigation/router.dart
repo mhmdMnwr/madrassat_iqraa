@@ -158,7 +158,17 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: '/transaction',
-        builder: (context, state) => const TransactionPage()),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<TransactionsCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AdminCubit>(),
+                ),
+              ],
+              child: const TransactionPage(),
+            )),
     GoRoute(
         path: '/admin',
         builder: (context, state) => MultiBlocProvider(

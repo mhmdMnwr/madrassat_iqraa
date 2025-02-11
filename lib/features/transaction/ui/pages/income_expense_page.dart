@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:madrassat_iqraa/core/String.dart';
 import 'package:madrassat_iqraa/core/admin/cubit/admin_cubit.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/appBar/curved_appbar.dart';
 import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/bloc/cubit/transactions_cubit.dart';
@@ -53,12 +55,9 @@ class _IncomeExpensePageState extends State<IncomeExpensePage> {
         BlocListener<TransactionsCubit, TransactionsState>(
           listener: (context, state) {
             if (state is TransactionCreated) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('تمت العملية بنجاح'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              MySnackBars.success(
+                  message: 'تمت العملية بنجاح', context: context);
+
               if (widget.isIncome) {
                 context
                     .read<AdminCubit>()
@@ -124,7 +123,8 @@ class _IncomeExpensePageState extends State<IncomeExpensePage> {
             totalFund: totalFund,
           );
         } else if (state is TransactionsError) {
-          return Text(state.message);
+          MySnackBars.failure(message: state.message, context: context);
+          return Center(child: Text(state.message));
         } else {
           return Container(
             color: Colors.red,
@@ -146,11 +146,21 @@ class _IncomeExpensePageState extends State<IncomeExpensePage> {
         if (state is TransactionsLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is TransactionsLoaded) {
-          return TransactionList(
-            isIncome: widget.isIncome,
-            transactions: state.transactions,
-          );
+          if (state.transactions.isEmpty) {
+            return const Center(
+                child: Text('لا توجد نتائج',
+                    style: TextStyle(
+                      fontFamily: AppStrings.fontfam,
+                      fontSize: 18,
+                    )));
+          } else {
+            return TransactionList(
+              isIncome: widget.isIncome,
+              transactions: state.transactions,
+            );
+          }
         } else if (state is TransactionsError) {
+          MySnackBars.failure(message: state.message, context: context);
           return Text(state.message);
         } else {
           return Container(

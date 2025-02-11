@@ -4,23 +4,34 @@ import 'package:madrassat_iqraa/features/transaction/ui/widgets/details.dart';
 import 'package:madrassat_iqraa/features/transaction/ui/widgets/transactionItems/stuff.dart';
 import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
 
-class TransactionList extends StatelessWidget {
-  final bool isIncome;
+class AllTransactionList extends StatelessWidget {
   final List<Transactions> transactions;
-
-  const TransactionList(
-      {super.key, required this.isIncome, required this.transactions});
+  final bool isLoadingMore; // Add this parameter
+  final ScrollController scrollController;
+  const AllTransactionList({
+    super.key,
+    required this.transactions,
+    this.isLoadingMore = false,
+    required this.scrollController, // Default to false
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 35.w, vertical: 13.h),
       child: ListView.builder(
-        itemCount: transactions.length, // Adjust the item count as needed
+        controller: scrollController,
+        itemCount: transactions.length + (isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
+          if (index == transactions.length && isLoadingMore) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.0),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
           return transactionList(
               context: context,
-              isIncome: isIncome,
+              isIncome: transactions[index].type,
               index: index,
               transaction: transactions[index]);
         },
@@ -28,11 +39,12 @@ class TransactionList extends StatelessWidget {
     );
   }
 
-  Widget transactionList(
-      {required BuildContext context,
-      required bool isIncome,
-      required int index,
-      required Transactions transaction}) {
+  Widget transactionList({
+    required BuildContext context,
+    required bool isIncome,
+    required int index,
+    required Transactions transaction,
+  }) {
     return InkWell(
       onTap: () {
         showDialog(
@@ -44,7 +56,7 @@ class TransactionList extends StatelessWidget {
       },
       child: Padding(
         padding:
-            EdgeInsets.fromLTRB(7.w, (index == 0) ? 255.h : 12.h, 10.w, 14.h),
+            EdgeInsets.fromLTRB(7.w, (index == 0) ? 170.h : 12.h, 10.w, 14.h),
         child: Container(
           height: 100.h,
           width: 400.w,

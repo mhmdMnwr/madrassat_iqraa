@@ -5,6 +5,7 @@ import 'package:madrassat_iqraa/core/navigation/navigation.dart';
 import 'package:madrassat_iqraa/core/string.dart';
 import 'package:madrassat_iqraa/core/theme/colors.dart';
 import 'package:madrassat_iqraa/core/theme/font.dart';
+import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
 import 'package:madrassat_iqraa/features/home/data/model/user_model.dart';
 import 'package:madrassat_iqraa/features/home/ui/widgets/login/form.dart';
@@ -59,13 +60,13 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<UserCubit, UserState>(
         listener: (context, state) {
           if (state is UserLoading) {
-            _showSnackBar('جاري المعالجة...');
+            MySnackBars.loading(message: 'يرجى الانتظار', context: context);
           } else if (state is UserCreated) {
             _handleUserCreated();
           } else if (state is UserLoaded) {
             _handleUserLoaded(state);
           } else if (state is UserError) {
-            _showSnackBar('خطأ: ${state.message}');
+            MySnackBars.failure(message: state.message, context: context);
           }
         },
         child: _buildLoginScreen(),
@@ -76,8 +77,10 @@ class _LoginPageState extends State<LoginPage> {
   // Handles UI feedback when user is created
   void _handleUserCreated() {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    _showSnackBar('تم إنشاء المستخدم بنجاح');
-    _showSnackBar('تم تسجيل طلبك');
+    MySnackBars.success(
+        message: ' تم إنشاء المستخدم , يرجى الانتظار حتى يقبلك الأدمن',
+        context: context);
+
     // _navigateToHomePage();
   }
 
@@ -89,20 +92,14 @@ class _LoginPageState extends State<LoginPage> {
         context.read<UserCubit>().saveUserId(state.user.id);
         _navigateToHomePage();
       } else if (state.user.refused) {
-        _showSnackBar("تم رفض طلبك ");
+        MySnackBars.failure(message: 'تم رفض طلبك', context: context);
       } else {
-        _showSnackBar('لم يتم قبول طلبك بعد');
+        MySnackBars.failure(message: "لم يتم قبول طلبك بعد", context: context);
       }
     } else {
-      _showSnackBar('اسم المستخدم أو كلمة المرور غير صحيحة');
+      MySnackBars.failure(
+          message: "اسم المستخدم أو كلمة المرور غير صحيحة", context: context);
     }
-  }
-
-  // Shows a snackbar with the given message
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   // Builds the main login screen UI
