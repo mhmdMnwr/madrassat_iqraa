@@ -8,8 +8,8 @@ void navigateToPage(BuildContext context, String pageName) {
     case 'home':
       context.push('/home');
       break;
-    case 'searchTeatcher':
-      context.push('/searchTeatcher');
+    case 'searchTeacher':
+      context.push('/searchTeacher');
       break;
     case 'searchStudent':
       context.push('/searchStudent');

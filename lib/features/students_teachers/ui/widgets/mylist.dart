@@ -7,6 +7,7 @@ import 'package:madrassat_iqraa/features/students_teachers/data/model/payed_mont
 import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/pages/detail.dart';
+import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/amount_dialog.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/info.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/pop_up_create.dart';
 import 'package:madrassat_iqraa/features/transaction/data/model/transaction_model.dart';
@@ -94,16 +95,31 @@ class _MyListState extends State<MyList> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 //! daf3 mousta7a9at button
-                myListTile(Icons.payment, label1, () {
+                myListTile(Icons.payment, label1, () async {
                   if (!isTeacher && !student.payed) {
+                    TextEditingController amountcontroller =
+                        TextEditingController();
+                    await showAddamount(
+                      isTeacher: widget.isteacher,
+                      context: context,
+                      amountController: amountcontroller,
+                      userName: widget.userName,
+                      student: student,
+                      previousContext: widget.previousContext,
+                      popUpContext: popUpContext,
+                    );
+                    int amount = int.parse(amountcontroller.text);
                     Transactions transaction = Transactions(
                         type: true,
                         userName: widget.userName,
-                        amount: 800,
-                        description: 'تبرع الطالب ${student.name}');
-                    PayedMonths date = PayedMonths(studentId: student.id);
+                        amount: amount,
+                        description:
+                            'تبرع الطالب ${student.name} بمبلغ $amount');
+                    PayedMonths date =
+                        PayedMonths(studentId: student.id, amount: amount);
 
-                    Student payedStudent = student.copyWith(payed: true);
+                    Student payedStudent =
+                        student.copyWith(payed: true, money: amount);
                     widget.previousContext
                         .read<StudentCubit>()
                         .createPayedMonths(date);
@@ -116,7 +132,7 @@ class _MyListState extends State<MyList> {
                         .createTransaction(transaction);
                     widget.previousContext
                         .read<AdminCubit>()
-                        .addFunds(amount: 800);
+                        .addFunds(amount: amount);
                     Navigator.of(popUpContext).pop();
                   } else if (isTeacher) {
                     Transactions transaction = Transactions(

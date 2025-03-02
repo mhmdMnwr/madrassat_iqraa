@@ -43,7 +43,6 @@ class MySnackBars {
     required String message,
     required BuildContext context,
   }) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 0,
       behavior: SnackBarBehavior.floating,

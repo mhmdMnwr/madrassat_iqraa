@@ -49,7 +49,7 @@ final GoRouter router = GoRouter(
               child: HomePage(),
             )),
     GoRoute(
-        path: '/searchTeatcher',
+        path: '/searchTeacher',
         builder: (context, state) => MultiBlocProvider(
               providers: [
                 BlocProvider(

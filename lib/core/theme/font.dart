@@ -8,7 +8,7 @@ class AppTextStyle {
     fontFamily: AppStrings.fontfam,
     fontWeight: FontWeight.w600,
     color: AppColors.navyBlue,
-    fontSize: 20.sp,
+    fontSize: 22.sp,
   );
   static TextStyle titles = TextStyle(
       fontFamily: AppStrings.fontfam,
@@ -35,4 +35,10 @@ class AppTextStyle {
       fontWeight: FontWeight.w700,
       color: AppColors.richRed,
       fontSize: 16.sp);
+
+  static TextStyle greenText = TextStyle(
+      fontFamily: AppStrings.fontfam,
+      fontWeight: FontWeight.w700,
+      color: AppColors.forestGreen,
+      fontSize: 23.sp);
 }

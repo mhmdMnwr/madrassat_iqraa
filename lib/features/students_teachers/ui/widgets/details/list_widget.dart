@@ -9,20 +9,27 @@ import 'package:madrassat_iqraa/features/transaction/ui/widgets/transactionItems
 class payedMonthList extends StatelessWidget {
   final List<PayedMonths> dates;
 
-  const payedMonthList({super.key, required this.dates});
+  const payedMonthList({
+    super.key,
+    required this.dates,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: dates.length, // Adjust the item count as needed
       itemBuilder: (context, index) {
-        return monthList(index: index, date: dates[index].payedDates);
+        return monthList(
+            index: index,
+            date: dates[index].payedDates,
+            amount: dates[index].amount);
       },
     );
   }
 }
 
-Widget monthList({required int index, required DateTime date}) {
+Widget monthList(
+    {required int index, required DateTime date, required num amount}) {
   return Padding(
     padding: EdgeInsets.fromLTRB(25.w, (index == 0) ? 255.h : 25.h, 25.w, 0),
     child: Container(
@@ -32,7 +39,7 @@ Widget monthList({required int index, required DateTime date}) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _moneyRow(isIncome: true),
+          _moneyRow(isIncome: true, amount: amount),
           _infoColumn(date: date),
         ],
       ),
@@ -70,6 +77,7 @@ Widget _infoColumn({required DateTime date}) {
 
 Widget _moneyRow({
   required bool isIncome,
+  required num amount,
 }) {
   return Padding(
     padding: EdgeInsets.only(
@@ -77,7 +85,7 @@ Widget _moneyRow({
       top: 15.h,
     ),
     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      Text("800 دج",
+      Text("$amount دج",
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.right,
           style: TextStyle(

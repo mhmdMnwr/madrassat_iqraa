@@ -47,8 +47,8 @@ class StudTeachAppBar extends AppBar {
                   child: Image.asset(
                     AppIcons.calendar,
                     color: AppColors.vibrantOrange,
-                    height: 45.h,
-                    width: 45.w,
+                    height: 35.h,
+                    width: 35.w,
                   ),
                 )
               : reset

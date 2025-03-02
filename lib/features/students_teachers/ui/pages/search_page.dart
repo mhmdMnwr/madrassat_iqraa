@@ -45,9 +45,7 @@ class _SearchPageState extends State<SearchPage> {
                   message: 'تمت العملية بنجاح', context: context);
             } else if (state is StudentError) {
               MySnackBars.failure(message: state.message, context: context);
-            } else if (state is StudentLoading) {
-              MySnackBars.loading(message: 'يرجى الانتظار', context: context);
-            }
+            } else if (state is StudentLoading) {}
           },
         ),
         BlocListener<UserCubit, UserState>(
@@ -60,6 +58,7 @@ class _SearchPageState extends State<SearchPage> {
       ],
       child: Scaffold(
         appBar: StudTeachAppBar(
+          isteacher: widget.isTeacher,
           context: context,
           title: AppPagesNames.search,
           search: false,

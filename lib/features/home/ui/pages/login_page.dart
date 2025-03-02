@@ -34,8 +34,8 @@ class _LoginPageState extends State<LoginPage> {
   // Handles saving or authenticating the user
   Future<void> _saveUser({required bool signup}) async {
     if (_formKey.currentState!.validate()) {
-      final userName = _userNameController.text;
-      final password = _passwordController.text;
+      final userName = _userNameController.text.trim();
+      final password = _passwordController.text.trim();
       final newUser = User(
         userName: userName,
         password: password,
@@ -66,7 +66,8 @@ class _LoginPageState extends State<LoginPage> {
           } else if (state is UserLoaded) {
             _handleUserLoaded(state);
           } else if (state is UserError) {
-            MySnackBars.failure(message: state.message, context: context);
+            MySnackBars.failure(
+                message: 'هذا المستخدم موجود بالفعل', context: context);
           }
         },
         child: _buildLoginScreen(),
@@ -76,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
 
   // Handles UI feedback when user is created
   void _handleUserCreated() {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     MySnackBars.success(
         message: ' تم إنشاء المستخدم , يرجى الانتظار حتى يقبلك الأدمن',
         context: context);

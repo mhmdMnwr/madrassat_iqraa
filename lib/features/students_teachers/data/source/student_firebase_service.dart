@@ -130,7 +130,7 @@ class StudentRemoteDataSource {
         .get();
 
     for (final doc in querySnapshot.docs) {
-      await doc.reference.update({'payed': false});
+      await doc.reference.update({'payed': false, 'money': 0});
     }
   }
 

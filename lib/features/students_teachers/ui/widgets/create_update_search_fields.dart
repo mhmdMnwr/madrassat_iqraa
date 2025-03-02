@@ -239,6 +239,12 @@ Widget genderField({required TextEditingController sexController}) {
             ),
           ),
         ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'الرجاء اختيار الجنس';
+          }
+          return null;
+        },
       ),
     ),
   );

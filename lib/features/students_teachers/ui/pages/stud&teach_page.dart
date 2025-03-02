@@ -8,6 +8,7 @@ import 'package:madrassat_iqraa/core/theme/font.dart';
 import 'package:madrassat_iqraa/core/widgets/snack_bar.dart';
 import 'package:madrassat_iqraa/features/home/data/repo/user_repo.dart';
 import 'package:madrassat_iqraa/features/home/ui/bloc/cubit/user_cubit.dart';
+import 'package:madrassat_iqraa/features/students_teachers/data/model/student_model.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_cubit.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/bloc/cubit/student_state.dart';
 import 'package:madrassat_iqraa/features/students_teachers/ui/widgets/mylist.dart';
@@ -31,6 +32,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
   late final TextEditingController priceController;
   late final TextEditingController payDayController;
   String userName = '';
+  String? selectedSex; // Track selected sex filter
 
   @override
   void initState() {
@@ -54,6 +56,22 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
     payDayController.dispose();
   }
 
+  void _updateSexFilter(String? sex) {
+    setState(() {
+      // Toggle the selected sex
+      if (selectedSex == sex) {
+        selectedSex = null; // Deselect if already selected
+      } else {
+        selectedSex = sex; // Select the new sex
+      }
+    });
+  }
+
+  // Helper method to calculate the sum of money from the filtered list
+  double _calculateTotalMoney(List<Student> students) {
+    return students.fold(0, (sum, student) => sum + (student.money ?? 0));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -75,7 +93,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
                 context.read<AdminCubit>().addStudent();
               }
             } else if (state is StudentDeleted) {
-              MySnackBars.failure(message: "تم حذف الطالب", context: context);
+              MySnackBars.success(message: "تم الطرد ", context: context);
               if (widget.isteacher) {
                 context.read<AdminCubit>().removeTeacher();
               } else {
@@ -112,7 +130,73 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
               ? AppPagesNames.studentsList
               : AppPagesNames.teachersList,
         ),
-        body: Container(color: AppColors.background, child: _buildbloc()),
+        body: Container(
+          color: AppColors.background,
+          child: Column(
+            children: [
+              // Add the sex filter here
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 30.w),
+                    GestureDetector(
+                      onTap: () => _updateSexFilter('ذكر'), // Filter by male
+                      child: FilterButton(
+                        label: 'ذكور',
+                        isSelected: selectedSex == 'ذكر',
+                      ),
+                    ),
+                    SizedBox(width: 30.w),
+                    GestureDetector(
+                      onTap: () => _updateSexFilter('أنثى'), // Filter by female
+                      child: FilterButton(
+                        label: 'إناث',
+                        isSelected: selectedSex == 'أنثى',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Display the total money for the filtered list
+              BlocBuilder<StudentCubit, StudentState>(
+                builder: (context, state) {
+                  if (state is StudentLoaded) {
+                    final filteredStudents = selectedSex == null
+                        ? state.students
+                        : state.students
+                            .where((student) => student.sex == selectedSex)
+                            .toList();
+                    final totalMoney = _calculateTotalMoney(filteredStudents);
+                    if (!widget.isteacher) {
+                      return Padding(
+                        padding: EdgeInsets.only(top: 10.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${totalMoney.toStringAsFixed(0)} دج',
+                              textDirection: TextDirection
+                                  .rtl, // Format to 2 decimal places
+                              style: AppTextStyle.greenText,
+                            ),
+                            Text(
+                              ' إجمالي التبرعات', // Format to 2 decimal places
+                              style: AppTextStyle.categories,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }
+                  return SizedBox.shrink(); // Hide if no data is loaded
+                },
+              ),
+              Expanded(child: _buildbloc()),
+            ],
+          ),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: SizedBox(
           height: 75.h,
@@ -120,13 +204,12 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
           child: FloatingActionButton(
               shape: CircleBorder(
                 side: BorderSide(
-                  color: AppColors.forestGreen, // Green border
-                  width: 3.0.sp, // Border thickness
+                  color: AppColors.forestGreen,
+                  width: 3.0.sp,
                 ),
               ),
-              backgroundColor: Colors.green, // Button background color
-              elevation: 11.0, // Shadow effect
-
+              backgroundColor: Colors.green,
+              elevation: 11.0,
               mini: false,
               onPressed: () {
                 showAddUserDialog(
@@ -150,7 +233,6 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
   Widget _buildbloc() {
     return BlocBuilder<StudentCubit, StudentState>(
       buildWhen: (previous, current) {
-        // Only rebuild if the current state is relevant
         return current is StudentLoading ||
             current is StudentLoaded ||
             current is StudentError;
@@ -159,7 +241,12 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
         if (state is StudentLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is StudentLoaded) {
-          if (state.students.isEmpty) {
+          final filteredStudents = selectedSex == null
+              ? state.students // Show all students if no sex is selected
+              : state.students
+                  .where((student) => student.sex == selectedSex)
+                  .toList();
+          if (filteredStudents.isEmpty) {
             return const Center(
               child: Text(
                 'لا توجد نتائج',
@@ -173,7 +260,7 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
             return MyList(
               userName: userName,
               previousContext: context,
-              students: state.students,
+              students: filteredStudents,
               isteacher: widget.isteacher,
             );
           }
@@ -187,6 +274,47 @@ class _StudentsTeachersPageState extends State<StudentsTeachersPage> {
       },
     );
   }
+}
 
-//this is a pop up view that shows the form to add students/teachers
+class FilterButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+
+  const FilterButton({
+    super.key,
+    required this.label,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40.h,
+      width: 140.w,
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      decoration: BoxDecoration(
+        color: isSelected ? AppColors.shadowBlue : AppColors.deepBlue,
+        borderRadius: BorderRadius.circular(20.sp),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          label,
+          textDirection: TextDirection.rtl,
+          style: TextStyle(
+            fontFamily: AppStrings.fontfam,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontSize: 20.sp,
+          ),
+        ),
+      ),
+    );
+  }
 }

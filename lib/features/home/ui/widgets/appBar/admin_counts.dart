@@ -30,7 +30,7 @@ class _AdminCountsState extends State<AdminCounts> {
       } else if (state is AdminLoaded) {
         return builder(schoolState: state.schoolState);
       } else if (state is AdminError) {
-        MySnackBars.failure(message: state.message, context: context);
+        //  MySnackBars.failure(message: state.message, context: context);
 
         return builder(
           error: true,
@@ -139,23 +139,23 @@ Widget numHolder({
         SizedBox(
           height: 10.h,
         ),
-        circle
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  !da ? text.toString() : "${text.toString()} دج",
-                  textDirection: TextDirection.rtl,
-                  style: TextStyle(
-                    fontFamily: AppStrings.fontfam,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 23.sp,
-                    color: AppColors.skyBlue,
-                  ),
-                ),
-              ),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            circle
+                ? "0"
+                : !da
+                    ? text.toString()
+                    : "${text.toString()} دج",
+            textDirection: TextDirection.rtl,
+            style: TextStyle(
+              fontFamily: AppStrings.fontfam,
+              fontWeight: FontWeight.w500,
+              fontSize: 23.sp,
+              color: AppColors.skyBlue,
+            ),
+          ),
+        ),
       ],
     ),
   );
