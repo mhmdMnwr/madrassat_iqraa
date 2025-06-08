@@ -1,4 +1,4 @@
 class AdminString {
-  static const String name = "عامر ياسين";
-  static const String password = "yassinadmin";
+  static const String name = "";
+  static const String password = "";
 }
